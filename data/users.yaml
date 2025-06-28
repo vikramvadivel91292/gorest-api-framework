@@ -1,0 +1,11 @@
+USERS:
+  valid:
+    name: "Joe Tester"
+    gender: "male"
+    email: "joe.tester.${RANDOM}@example.com"
+    status: "active"
+  invalid:
+    name: ""
+    gender: "unknown"
+    email: "not-an-email"
+    status: "inactive"
