@@ -18,5 +18,5 @@ Create Valid User
     ${data}=    Create Dictionary    name=Test User    gender=male    email=testuser${random}@domain.com    status=active
     ${response}=    POST On Session    gorest    /users    json=${data}
     Should Be Equal As Integers    ${response.status_code}    201
-    ${json}=    ${resp.json()}    ${response.content}
+    ${json}=    Convert String To Json    ${response.content}
     RETURN    ${json['id']}

@@ -1,11 +1,13 @@
 *** Settings ***
-Resource          ../../resources/keywords.robot
+Resource    ../../../resources/keywords.robot
+Resource    ../../../resources/variables.robot
 
 *** Test Cases ***
 Get Users With Pagination
     ${headers}=    Get Auth Headers
     Create Session    gorest    ${BASE_URL}    headers=${headers}
-    ${response}=    GET On Session    gorest    /users?page=2
+    &{params}=    Create Dictionary    page=2
+    ${response}=    GET On Session    gorest    /users    params=${params}
     Should Be Equal As Integers    ${response.status_code}    200
-    ${json}=    To Json    ${response.content}
+    ${json}=    Convert String To Json    ${response.content}
     Should Not Be Empty    ${json}

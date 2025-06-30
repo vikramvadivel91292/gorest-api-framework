@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.1 (Python 3.13.5 on darwin)" generated="2025-06-30T20:33:01.132850" rpa="false" schemaversion="5">
+<suite id="s1" name="Create New User" source="/Users/vivadivel/Desktop/gorest-api-framework/tests/gorest/Create/Create_New_User.robot">
+<test id="s1-t1" name="Create New User" line="5">
+<kw name="Create Valid User" owner="keywords">
+<kw name="Get Auth Headers" owner="variables">
+<kw name="Get File" owner="OperatingSystem">
+<msg time="2025-06-30T20:33:01.247040" level="INFO" html="true">Getting file '&lt;a href="file:///Users/vivadivel/Desktop/gorest-api-framework/data/token.txt"&gt;/Users/vivadivel/Desktop/gorest-api-framework/data/token.txt&lt;/a&gt;'.</msg>
+<msg time="2025-06-30T20:33:01.247517" level="INFO">${token} = c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880
+</msg>
+<var>${token}</var>
+<arg>${TOKEN_FILE}</arg>
+<doc>Returns the contents of a specified file.</doc>
+<status status="PASS" start="2025-06-30T20:33:01.246979" elapsed="0.000553"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-06-30T20:33:01.247662" level="INFO">Length is 65.</msg>
+<arg>${token}</arg>
+<arg>msg=Token file is empty</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-06-30T20:33:01.247585" elapsed="0.000093"/>
+</kw>
+<kw name="Strip String" owner="String">
+<msg time="2025-06-30T20:33:01.247770" level="INFO">${token} = c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880</msg>
+<var>${token}</var>
+<arg>${token}</arg>
+<doc>Remove leading and/or trailing whitespaces from the given string.</doc>
+<status status="PASS" start="2025-06-30T20:33:01.247718" elapsed="0.000061"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-06-30T20:33:01.247925" level="INFO">&amp;{headers} = { Authorization=Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880 }</msg>
+<var>&amp;{headers}</var>
+<arg>Authorization=Bearer ${token}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-06-30T20:33:01.247819" elapsed="0.000115"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-06-30T20:33:01.248006" level="INFO">Token: Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880</msg>
+<arg>Token: Bearer ${token}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-06-30T20:33:01.247968" elapsed="0.000050"/>
+</kw>
+<return>
+<value>&amp;{headers}</value>
+<status status="PASS" start="2025-06-30T20:33:01.248034" elapsed="0.000017"/>
+</return>
+<msg time="2025-06-30T20:33:01.248097" level="INFO">${headers} = {'Authorization': 'Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880'}</msg>
+<var>${headers}</var>
+<status status="PASS" start="2025-06-30T20:33:01.246738" elapsed="0.001366"/>
+</kw>
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2025-06-30T20:33:01.248200" level="INFO">Creating Session using : alias=gorest, url=https://gorest.co.in/public/v2, headers={'Authorization': 'Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880'},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>gorest</arg>
+<arg>${BASE_URL}</arg>
+<arg>headers=${headers}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2025-06-30T20:33:01.248134" elapsed="0.000133"/>
+</kw>
+<kw name="Generate Random String" owner="keywords">
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-06-30T20:33:01.248427" level="INFO">${CHARS} = abcdefghijklmnopqrstuvwxyz0123456789</msg>
+<var>${CHARS}</var>
+<arg>abcdefghijklmnopqrstuvwxyz0123456789</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-06-30T20:33:01.248392" elapsed="0.000042"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-06-30T20:33:01.248569" level="INFO">${result} = xxxse</msg>
+<var>${result}</var>
+<arg>''.join(random.choices('${CHARS}', k=${length}))</arg>
+<arg>random</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-06-30T20:33:01.248464" elapsed="0.000113"/>
+</kw>
+<return>
+<value>${result}</value>
+<status status="PASS" start="2025-06-30T20:33:01.248592" elapsed="0.000011"/>
+</return>
+<msg time="2025-06-30T20:33:01.248638" level="INFO">${random} = xxxse</msg>
+<var>${random}</var>
+<arg>5</arg>
+<status status="PASS" start="2025-06-30T20:33:01.248318" elapsed="0.000327"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-06-30T20:33:01.248748" level="INFO">${data} = {'name': 'Test User', 'gender': 'male', 'email': 'testuserxxxse@domain.com', 'status': 'active'}</msg>
+<var>${data}</var>
+<arg>name=Test User</arg>
+<arg>gender=male</arg>
+<arg>email=testuser${random}@domain.com</arg>
+<arg>status=active</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-06-30T20:33:01.248678" elapsed="0.000077"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-06-30T20:33:01.982725" level="INFO">POST Request : url=https://gorest.co.in/public/v2/users 
+ path_url=/public/v2/users 
+ headers={'User-Agent': 'python-requests/2.32.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880', 'Content-Length': '96', 'Content-Type': 'application/json'} 
+ body=b'{"name": "Test User", "gender": "male", "email": "testuserxxxse@domain.com", "status": "active"}' 
+ </msg>
+<msg time="2025-06-30T20:33:01.982797" level="INFO">POST Response : url=https://gorest.co.in/public/v2/users 
+ status=201, reason=Created 
+ headers={'Date': 'Mon, 30 Jun 2025 15:03:01 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '102', 'Connection': 'keep-alive', 'Cache-Control': 'max-age=0, private, must-revalidate', 'Etag': 'W/"b0ec5f7cf10b2d593f81b068693e9e58"', 'Feature-Policy': "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'", 'Location': 'https://gorest.co.in/public/v2/users/7975536', 'Referrer-Policy': 'strict-origin-when-cross-origin', 'Vary': 'Origin', 'X-Content-Type-Options': 'nosniff', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-Ratelimit-Limit': '90', 'X-Ratelimit-Remaining': '89', 'X-Ratelimit-Reset': '1', 'X-Request-Id': '4cb210e4-b0ba-485b-8d9b-f7ff8fa8b8b7', 'X-Runtime': '0.108003', 'X-Xss-Protection': '0', 'Cf-Cache-Status': 'DYNAMIC', 'Nel': '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}', 'Report-To': '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=R7r9GcJ83TFXuDNUcCMmYD9T2CUQe1huuSusqL98fgnzkdcEYYpUNH4DQCExD5LzaTkbk3pbsiaLMT1AFBW8vy8f7el1d4YIoRRI9eO8HlGTc0B0ABh5XQ%3D%3D"}]}', 'Server': 'cloudflare', 'CF-RAY': '957e8c4a59f0c50c-SIN', 'alt-svc': 'h3=":443"; ma=86400'} 
+ body={"id":7975536,"name":"Test User","email":"testuserxxxse@domain.com","gender":"male","status":"active"} 
+ </msg>
+<msg time="2025-06-30T20:33:01.982835" level="INFO">/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/urllib3/connectionpool.py:1097: InsecureRequestWarning: Unverified HTTPS request is being made to host 'gorest.co.in'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-06-30T20:33:01.982913" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<var>${response}</var>
+<arg>gorest</arg>
+<arg>/users</arg>
+<arg>json=${data}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-06-30T20:33:01.248787" elapsed="0.734138"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2025-06-30T20:33:01.983267" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>201</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2025-06-30T20:33:01.983010" elapsed="0.000285"/>
+</kw>
+<kw name="Convert String To Json" owner="JSONLibrary">
+<msg time="2025-06-30T20:33:01.983628" level="INFO">${json} = {'id': 7975536, 'name': 'Test User', 'email': 'testuserxxxse@domain.com', 'gender': 'male', 'status': 'active'}</msg>
+<var>${json}</var>
+<arg>${response.content}</arg>
+<doc>Convert String to JSON object</doc>
+<status status="PASS" start="2025-06-30T20:33:01.983419" elapsed="0.000221"/>
+</kw>
+<return>
+<value>${json['id']}</value>
+<status status="PASS" start="2025-06-30T20:33:01.983664" elapsed="0.000018"/>
+</return>
+<msg time="2025-06-30T20:33:01.983870" level="INFO">${user_id} = 7975536</msg>
+<var>${user_id}</var>
+<status status="PASS" start="2025-06-30T20:33:01.246613" elapsed="0.737268"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Created user with ID: ${user_id}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2025-06-30T20:33:01.983951" elapsed="0.000077"/>
+</kw>
+<status status="PASS" start="2025-06-30T20:33:01.246347" elapsed="0.737745"/>
+</test>
+<status status="PASS" start="2025-06-30T20:33:01.133458" elapsed="0.850827"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Create New User" id="s1" pass="1" fail="0" skip="0">Create New User</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

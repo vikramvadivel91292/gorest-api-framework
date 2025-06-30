@@ -3,10 +3,10 @@ Resource    ../../../resources/keywords.robot
 Resource    ../../../resources/variables.robot
 
 *** Test Cases ***
-Delete User
+Update User With Invalid Data
     ${user_id}=    Create Valid User
     ${headers}=    Get Auth Headers
     Create Session    gorest    ${BASE_URL}    headers=${headers}
-    ${response}=    DELETE On Session    gorest    /users/${user_id}
-    Should Be Equal As Integers    ${response.status_code}    204
-    
+    ${data}=    Create Dictionary    gender=invalidgender
+    ${response}=    PATCH On Session    gorest    /users/${user_id}    json=${data}    expected_status=422
+    Should Be Equal As Integers    ${response.status_code}    422

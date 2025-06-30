@@ -1,5 +1,5 @@
 *** Settings ***
-Resource    /Users/vivadivel/Desktop/gorest-api-framework/resources/keywords.robot
+Resource    ../../../resources/keywords.robot
 
 *** Test Cases ***
 Create New User
