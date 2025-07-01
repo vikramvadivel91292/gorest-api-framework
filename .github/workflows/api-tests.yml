@@ -7,6 +7,7 @@ on:
       - 'tests/**'
       - 'src/**'
       - 'requirements.txt'
+      - '*.yml'
   pull_request:
     branches: [ main ]
     paths:
@@ -26,7 +27,7 @@ on:
       rerun_failed:
         description: 'Rerun failed tests? (true/false)'
         required: false
-        default: 'true'
+        default: ''
   schedule:
     - cron: '0 2 * * *' # Every day at 2 AM UTC
 
@@ -68,15 +69,21 @@ jobs:
         FILES="${{ github.event.inputs.test_files }}"
         TAGS="${{ github.event.inputs.tags }}"
         CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output output.xml"
-        CMD="$CMD tests/gorest/$GROUP"
         if [ ! -z "$TAGS" ]; then
-          CMD="$CMD --include \"$TAGS\""
+          CMD="$CMD --include $TAGS"
         fi
         if [ ! -z "$FILES" ]; then
           CMD="$CMD $FILES"
+        else
+          CMD="$CMD tests/gorest/$GROUP"
         fi
         echo "Running: $CMD"
         eval $CMD
+
+        if [ $? -ne 0 ]; then
+          echo "Robot tests failed."
+          exit 1
+        fi
 
     - name: Rerun failed tests (if any and if rerun is enabled)
       if: always()
