@@ -29,7 +29,7 @@ on:
         required: false
         default: ''
   schedule:
-    - cron: '0 2 * * *' # Every day at 2 AM UTC
+    - cron: '0 8 * * *' # Every day at 8 AM UTC
 
 jobs:
   test:
@@ -146,6 +146,14 @@ jobs:
       with:
         version: 2.27.0
 
+    - name: Install Allure CLI
+      run: |
+        wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
+        tar -zxvf allure-2.27.0.tgz
+        sudo mv allure-2.27.0 /opt/allure
+        sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+        allure --version
+    
     - name: Generate Allure report
       run: |
         allure generate merged-allure-results -o site --clean
