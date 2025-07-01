@@ -4,6 +4,7 @@ Resource    ../../../resources/variables.robot
 
 *** Test Cases ***
 Update User With Valid Data
+    [Tags]    smoke    regression
     ${user_id}=    Create Valid User
     ${headers}=    Get Auth Headers
     Create Session    gorest    ${BASE_URL}    headers=${headers}

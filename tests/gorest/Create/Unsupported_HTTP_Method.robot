@@ -4,6 +4,7 @@ Resource    ../../../resources/variables.robot
 
 *** Test Cases ***
 Unsupported HTTP Method
+    [Tags]    regression
     ${headers}=    Get Auth Headers
     Create Session    gorest    ${BASE_URL}    headers=${headers}
     ${user_id}=    Create Valid User

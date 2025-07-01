@@ -4,6 +4,7 @@ Resource    ../../../resources/variables.robot
 
 *** Test Cases ***
 Create User With Extra Fields
+    [Tags]    regression
     ${headers}=    Get Auth Headers
     Create Session    gorest    ${BASE_URL}    headers=${headers}
     ${random}=    Generate Random String    5

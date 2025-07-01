@@ -7,6 +7,7 @@ Resource    ../../../resources/variables.robot
 
 *** Test Cases ***
 GET Users List from GoREST
+    [Tags]    smoke    regression
     ${headers}=    Get Auth Headers
     Create Session    gorest    ${BASE_URL}    headers=${headers}
     ${response}=    GET On Session    gorest    /users

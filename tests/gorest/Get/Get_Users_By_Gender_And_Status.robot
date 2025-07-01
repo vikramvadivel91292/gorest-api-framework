@@ -4,11 +4,14 @@ Resource    ../../../resources/variables.robot
 
 *** Test Cases ***
 Get Users By Gender And Status
+    [Tags]    smoke    regression
     ${headers}=    Get Auth Headers
     Create Session    gorest    ${BASE_URL}    headers=${headers}
-    ${response}=    GET On Session    gorest    /users?gender=male&status=active
+    &{params}=    Create Dictionary    gender=male    status=active
+    ${response}=    GET On Session    gorest    /users    params=${params}
     Should Be Equal As Integers    ${response.status_code}    200
-    ${json}=    To Json    ${response.content}
-    :FOR    ${user}    IN    @{json}
-    \    Should Be Equal    ${user['gender']}    male
-    \    Should Be Equal    ${user['status']}    active
+    ${json}=    Convert String To Json    ${response.content}
+    FOR    ${user}    IN    @{json}
+        Should Be Equal    ${user['gender']}    male
+        Should Be Equal    ${user['status']}    active
+    END

@@ -4,6 +4,7 @@ Resource    ../../../resources/variables.robot
 
 *** Test Cases ***
 Create User With Invalid Email
+    [Tags]    regression
     ${headers}=    Get Auth Headers
     Create Session    gorest    ${BASE_URL}    headers=${headers}
     ${data}=    Create Dictionary    name=Test User    gender=male    email=invalidemail    status=active

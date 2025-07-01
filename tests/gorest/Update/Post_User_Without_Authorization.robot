@@ -4,6 +4,7 @@ Resource    ../../../resources/variables.robot
 
 *** Test Cases ***
 Post User Without Authorization
+    [Tags]    regression
     Create Session    gorest    ${BASE_URL}
     ${random}=    Generate Random String    5
     ${data}=    Create Dictionary    name=No Auth    gender=male    email=noauth${random}@domain.com    status=active

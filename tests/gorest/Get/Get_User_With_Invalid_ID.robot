@@ -4,6 +4,7 @@ Resource    ../../../resources/variables.robot
 
 *** Test Cases ***
 Get User With Invalid ID
+    [Tags]    regression
     ${headers}=    Get Auth Headers
     Create Session    gorest    ${BASE_URL}    headers=${headers}
     ${response}=    GET On Session    gorest    /users/99999999    expected_status=404
