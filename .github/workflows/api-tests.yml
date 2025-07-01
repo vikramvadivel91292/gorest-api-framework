@@ -141,11 +141,6 @@ jobs:
         mkdir merged-allure-results
         find all-artifacts -type d -name 'allure-results-*' -exec cp -r {}/* merged-allure-results/ \;
 
-    - name: Setup Allure CLI
-      uses: allure-actions/allure-commandline@v2
-      with:
-        version: 2.27.0
-
     - name: Install Allure CLI
       run: |
         wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
