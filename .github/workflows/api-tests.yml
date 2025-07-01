@@ -36,7 +36,7 @@ jobs:
     strategy:
       matrix:
         group: [Create, Delete, Get, Update]
-        max-parallel: 2
+      max-parallel: 2
     env:
       ALLURE_RESULTS_DIR: allure-results-${{ matrix.group }}
       ROBOT_RESULTS_DIR: results-${{ matrix.group }}
@@ -135,7 +135,7 @@ jobs:
         find all-artifacts -type d -name 'allure-results-*' -exec cp -r {}/* merged-allure-results/ \;
 
     - name: Setup Allure CLI
-      uses: allure-actions/allure-commandline@v2.13.0
+      uses: allure-framework/actions@v2.13.0
       with:
         version: 2.27.0
 
