@@ -56,6 +56,8 @@ jobs:
         if: ${{ github.event.inputs.test_files != '' && !contains(github.event.inputs.test_files, matrix.group) }}
         run: |
           echo "Skipping group ${{ matrix.group }} because it's not in test_files input"
+          mkdir -p ${{ env.ROBOT_RESULTS_DIR }}
+          echo "<robot/>" > ${{ env.ROBOT_RESULTS_DIR }}/output.xml
           exit 0
 
       - name: Checkout code
