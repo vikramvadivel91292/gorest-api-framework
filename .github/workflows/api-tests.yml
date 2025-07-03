@@ -147,8 +147,9 @@ jobs:
         run: |
           mkdir -p merged-allure-results
           find all-artifacts -type d -name 'allure-results-*' | while read dir; do
-          cp -v $dir/* merged-allure-results/ || true
+          cp -v $dir/* merged-allure-results/ 2>/dev/null || true
           done
+          echo "Contents of merged-allure-results:"
           ls -l merged-allure-results
 
       - name: Merge Allure results
