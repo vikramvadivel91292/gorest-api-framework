@@ -126,6 +126,7 @@ jobs:
           fi
 
       - name: Upload Robot and Allure Results (per group)
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: robot-allure-results-${{ matrix.group }}
@@ -145,8 +146,18 @@ jobs:
       - name: Merge Allure results
         run: |
           mkdir merged-allure-results
-          find all-artifacts -type d -name 'allure-results-*' -exec cp -r {}/* merged-allure-results/ \;
+          if [ -d all-artifacts ]; then
+            find all-artifacts -type d -name 'allure-results-*' -exec cp -r {}/* merged-allure-results/ \;
+          else
+            echo "No artifacts found to merge."
+          fi
 
+      - name: List Allure results directory (per group)
+        if: always()
+        run: ls -lR ${{ env.ALLURE_RESULTS_DIR }} || echo "No Allure results directory"
+
+      - name: List downloaded artifacts
+        run: ls -lR all-artifacts || echo "No artifacts directory found"
       - name: Install Allure CLI
         run: |
           wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz

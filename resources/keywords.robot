@@ -2,7 +2,7 @@
 Library           RequestsLibrary
 Library           JSONLibrary
 Library           Collections
-Resource    /Users/vivadivel/Desktop/gorest-api-framework/resources/variables.robot
+Resource    variables.robot
 
 *** Keywords ***
 # Read User Data From File
