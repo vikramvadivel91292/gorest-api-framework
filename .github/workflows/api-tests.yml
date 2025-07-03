@@ -145,12 +145,14 @@ jobs:
 
       - name: Merge Allure results
         run: |
-          mkdir merged-allure-results
-          if [ -d all-artifacts ]; then
-            find all-artifacts -type d -name 'allure-results-*' -exec cp -r {}/* merged-allure-results/ \;
-          else
-            echo "No artifacts found to merge."
-          fi
+          mkdir -p merged-allure-results
+          find all-artifacts -type d -name 'allure-results-*' | while read dir; do
+          cp -v $dir/* merged-allure-results/ || true
+          done
+          ls -l merged-allure-results
+
+      - name: Merge Allure results
+        run: ls -l merged-allure-results || echo "No merged Allure results found"
 
       - name: List Allure results directory (per group)
         if: always()
@@ -170,6 +172,9 @@ jobs:
         run: |
           allure generate merged-allure-results -o site --clean
 
+      - name: List site directory
+        run: ls -l site || echo "No Allure report generated"
+    
       - name: Deploy Allure report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
