@@ -33,18 +33,12 @@ on:
         description: 'Rerun failed tests? (true/false)'
         required: false
         default: ''
-      rerun_group:
-        description: 'Test group to rerun failed tests for (Create, Delete, Get, Update)'
-        required: false
-        default: ''
-
   schedule:
     - cron: '0 8 * * *' # Every day at 8 AM UTC
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
       matrix:
         group: [Create, Delete, Get, Update]
@@ -71,9 +65,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
-
     - name: Run Robot tests with Allure output (first run)
-      continue-on-error: true
       env:
         GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
       run: |
@@ -91,14 +83,11 @@ jobs:
         fi
         echo "Running: $CMD"
         eval $CMD
-
         if [ $? -ne 0 ]; then
           echo "Robot tests failed."
-          # exit 1
+          exit 1
         fi
-
     - name: Rerun failed tests (if any and if rerun is enabled)
-      continue-on-error: true
       if: always()
       env:
         GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
@@ -125,13 +114,11 @@ jobs:
         else
           echo "Rerun of failed tests is disabled by workflow input."
         fi
-
     - name: Merge Robot Framework results
       run: |
         if [ -f ${ROBOT_RESULTS_DIR}/rerun.xml ]; then
           rebot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
         fi
-
     - name: Upload Robot and Allure Results (per group)
       uses: actions/upload-artifact@v4
       with:
@@ -139,13 +126,6 @@ jobs:
         path: |
           ${{ env.ROBOT_RESULTS_DIR }}/
           ${{ env.ALLURE_RESULTS_DIR }}/
-
-    - name: Upload output.xml for rerun (per group)
-      uses: actions/upload-artifact@v4
-      with:
-        name: robot-output-${{ matrix.group }}
-        path: ${{ env.ROBOT_RESULTS_DIR }}/output.xml
-
   publish-allure-report:
     needs: test
     runs-on: ubuntu-latest
@@ -159,11 +139,6 @@ jobs:
       run: |
         mkdir merged-allure-results
         find all-artifacts -type d -name 'allure-results-*' -exec cp -r {}/* merged-allure-results/ \;
-
-    # --- ADD: List merged Allure results directory for debugging ---
-    - name: List merged Allure results directory
-      run: ls -lR merged-allure-results
-
     - name: Install Allure CLI
       run: |
         wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
@@ -171,124 +146,13 @@ jobs:
         sudo mv allure-2.27.0 /opt/allure
         sudo ln -s /opt/allure/bin/allure /usr/bin/allure
         allure --version
-
     - name: Generate Allure report
       run: |
         allure generate merged-allure-results -o site --clean
-
-    # --- ADD: List Allure report directory for debugging ---
-    - name: List Allure report directory
-      run: ls -lR site
-
-    - name: Upload Allure HTML report as artifact
-      uses: actions/upload-artifact@v4
+    - name: Deploy Allure report to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
       with:
-        name: allure-report
-        path: ./site
-
-    - name: Add Allure Report summary to workflow
-      run: |
-        echo "## Allure Report" >> $GITHUB_STEP_SUMMARY
-        echo "The full Allure HTML report is available as a downloadable artifact in this workflow run (see 'allure-report' in the Artifacts section above)." >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "To view the report:" >> $GITHUB_STEP_SUMMARY
-        echo "1. Download the 'allure-report' artifact from the Artifacts section above." >> $GITHUB_STEP_SUMMARY
-        echo "2. Extract the archive and open the 'index.html' file in your browser." >> $GITHUB_STEP_SUMMARY
-        cat $GITHUB_STEP_SUMMARY # Debugging line to print the summary content to the logs
-
-  rerun-failed:
-    name: Rerun Only Failed Tests (Separate Workflow)
-    continue-on-error: true
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.rerun_group != '' }}
-    env:
-      GROUP: ${{ github.event.inputs.rerun_group }}
-      ALLURE_RESULTS_DIR: allure-results-${{ github.event.inputs.rerun_group }}
-      ROBOT_RESULTS_DIR: results-${{ github.event.inputs.rerun_group }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-
-      - name: Download previous Robot output.xml
-        uses: actions/download-artifact@v4
-        with:
-          name: robot-output-${{ github.event.inputs.rerun_group }}
-          path: ${{ env.ROBOT_RESULTS_DIR }}
-
-      - name: Rerun only failed tests for selected group
-        continue-on-error: true
-        env:
-          GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
-        run: |
-          robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} \
-                -d ${ROBOT_RESULTS_DIR} \
-                --output rerun.xml \
-                --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml \
-                tests/gorest/${GROUP}
-
-      - name: Upload rerun results
-        uses: actions/upload-artifact@v4
-        with:
-          name: robot-rerun-results-${{ github.event.inputs.rerun_group }}
-          path: ${{ env.ROBOT_RESULTS_DIR }}/rerun.xml
-
-      - name: Upload Allure rerun results
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-rerun-results-${{ github.event.inputs.rerun_group }}
-          path: ${{ env.ALLURE_RESULTS_DIR }}/
-
-  generate-rerun-allure-report:
-    name: Generate Allure Report for Rerun Group Only
-    needs: rerun-failed
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.rerun_group != '' }}
-    env:
-      GROUP: ${{ github.event.inputs.rerun_group }}
-      ALLURE_RESULTS_DIR: allure-results-${{ github.event.inputs.rerun_group }}
-    steps:
-      - name: Download Allure rerun results for group
-        uses: actions/download-artifact@v4
-        with:
-          name: allure-rerun-results-${{ github.event.inputs.rerun_group }}
-          path: ${{ env.ALLURE_RESULTS_DIR }}
-
-      - name: Install Allure CLI
-        run: |
-          wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
-          tar -zxvf allure-2.27.0.tgz
-          sudo mv allure-2.27.0 /opt/allure
-          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
-          allure --version
-
-      - name: Generate Allure report for rerun group
-        run: |
-          allure generate ${{ env.ALLURE_RESULTS_DIR }} -o site --clean
-
-      - name: List Allure report directory for rerun group
-        run: ls -lR site
-
-      - name: Upload Allure HTML report for rerun group as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-rerun-report-${{ env.GROUP }}
-          path: ./site
-
-      - name: Add rerun group Allure Report summary to workflow
-        run: |
-          echo "## Allure Rerun Report for Group: $GROUP" >> $GITHUB_STEP_SUMMARY
-          echo "The Allure HTML report for the rerun group is available as a downloadable artifact in this workflow run (see 'allure-rerun-report-$GROUP' in the Artifacts section above)." >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "To view the rerun report:" >> $GITHUB_STEP_SUMMARY
-          echo "1. Download the 'allure-rerun-report-$GROUP' artifact from the Artifacts section above." >> $GITHUB_STEP_SUMMARY
-          echo "2. Extract the archive and open the 'index.html' file in your browser." >> $GITHUB_STEP_SUMMARY
-          cat $GITHUB_STEP_SUMMARY # Debugging line to print the summary content to the logs
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./site
+        publish_branch: gh-pages
+        force_orphan: true
