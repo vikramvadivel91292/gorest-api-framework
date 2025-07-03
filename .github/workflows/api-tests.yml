@@ -47,6 +47,10 @@ jobs:
       matrix:
         group: [Create, Delete, Get, Update]
       max-parallel: 2
+    env:
+      ALLURE_RESULTS_DIR: allure-results-${{ matrix.group }}
+      ROBOT_RESULTS_DIR: results-${{ matrix.group }}
+    
     steps:
       - name: Skip if not selected group
         if: ${{ github.event.inputs.test_files != '' && !contains(github.event.inputs.test_files, matrix.group) }}
@@ -54,11 +58,6 @@ jobs:
           echo "Skipping group ${{ matrix.group }} because it's not in test_files input"
           exit 0
 
-    env:
-      ALLURE_RESULTS_DIR: allure-results-${{ matrix.group }}
-      ROBOT_RESULTS_DIR: results-${{ matrix.group }}
-
-    steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
