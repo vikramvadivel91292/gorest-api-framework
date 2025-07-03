@@ -188,6 +188,7 @@ jobs:
         with:
           name: robot-output-${{ matrix.group }}
           path: ${{ env.ROBOT_RESULTS_DIR }}
+        continue-on-error: true
 
       - name: Rerun failed tests if output.xml exists
         id: rerun
