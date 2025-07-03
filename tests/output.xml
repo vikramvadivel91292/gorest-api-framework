@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.1 (Python 3.13.5 on darwin)" generated="2025-07-03T14:49:20.080436" rpa="false" schemaversion="5">
+<suite id="s1" name="Unsupported HTTP Method" source="/Users/vivadivel/Desktop/gorest-api-framework/tests/gorest/Create/Unsupported_HTTP_Method.robot">
+<test id="s1-t1" name="Unsupported HTTP Method" line="6">
+<kw name="Get Auth Headers" owner="variables">
+<kw name="Get File" owner="OperatingSystem">
+<msg time="2025-07-03T14:49:20.195772" level="INFO" html="true">Getting file '&lt;a href="file:///Users/vivadivel/Desktop/gorest-api-framework/data/token.txt"&gt;/Users/vivadivel/Desktop/gorest-api-framework/data/token.txt&lt;/a&gt;'.</msg>
+<msg time="2025-07-03T14:49:20.196226" level="INFO">${token} = c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880
+</msg>
+<var>${token}</var>
+<arg>${TOKEN_FILE}</arg>
+<doc>Returns the contents of a specified file.</doc>
+<status status="PASS" start="2025-07-03T14:49:20.195701" elapsed="0.000540"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-07-03T14:49:20.196369" level="INFO">Length is 65.</msg>
+<arg>${token}</arg>
+<arg>msg=Token file is empty</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-07-03T14:49:20.196294" elapsed="0.000091"/>
+</kw>
+<kw name="Strip String" owner="String">
+<msg time="2025-07-03T14:49:20.196474" level="INFO">${token} = c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880</msg>
+<var>${token}</var>
+<arg>${token}</arg>
+<doc>Remove leading and/or trailing whitespaces from the given string.</doc>
+<status status="PASS" start="2025-07-03T14:49:20.196423" elapsed="0.000060"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-07-03T14:49:20.196628" level="INFO">&amp;{headers} = { Authorization=Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880 }</msg>
+<var>&amp;{headers}</var>
+<arg>Authorization=Bearer ${token}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-07-03T14:49:20.196522" elapsed="0.000115"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-07-03T14:49:20.196709" level="INFO">Token: Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880</msg>
+<arg>Token: Bearer ${token}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-07-03T14:49:20.196672" elapsed="0.000049"/>
+</kw>
+<return>
+<value>&amp;{headers}</value>
+<status status="PASS" start="2025-07-03T14:49:20.196737" elapsed="0.000017"/>
+</return>
+<msg time="2025-07-03T14:49:20.196800" level="INFO">${headers} = {'Authorization': 'Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880'}</msg>
+<var>${headers}</var>
+<status status="PASS" start="2025-07-03T14:49:20.195413" elapsed="0.001394"/>
+</kw>
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2025-07-03T14:49:20.196940" level="INFO">Creating Session using : alias=gorest, url=https://gorest.co.in/public/v2, headers={'Authorization': 'Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880'},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>gorest</arg>
+<arg>${BASE_URL}</arg>
+<arg>headers=${headers}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2025-07-03T14:49:20.196866" elapsed="0.000150"/>
+</kw>
+<kw name="Create Valid User" owner="keywords">
+<kw name="Get Auth Headers" owner="variables">
+<kw name="Get File" owner="OperatingSystem">
+<msg time="2025-07-03T14:49:20.197310" level="INFO" html="true">Getting file '&lt;a href="file:///Users/vivadivel/Desktop/gorest-api-framework/data/token.txt"&gt;/Users/vivadivel/Desktop/gorest-api-framework/data/token.txt&lt;/a&gt;'.</msg>
+<msg time="2025-07-03T14:49:20.197372" level="INFO">${token} = c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880
+</msg>
+<var>${token}</var>
+<arg>${TOKEN_FILE}</arg>
+<doc>Returns the contents of a specified file.</doc>
+<status status="PASS" start="2025-07-03T14:49:20.197269" elapsed="0.000112"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-07-03T14:49:20.197463" level="INFO">Length is 65.</msg>
+<arg>${token}</arg>
+<arg>msg=Token file is empty</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-07-03T14:49:20.197414" elapsed="0.000061"/>
+</kw>
+<kw name="Strip String" owner="String">
+<msg time="2025-07-03T14:49:20.197549" level="INFO">${token} = c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880</msg>
+<var>${token}</var>
+<arg>${token}</arg>
+<doc>Remove leading and/or trailing whitespaces from the given string.</doc>
+<status status="PASS" start="2025-07-03T14:49:20.197506" elapsed="0.000050"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-07-03T14:49:20.197660" level="INFO">&amp;{headers} = { Authorization=Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880 }</msg>
+<var>&amp;{headers}</var>
+<arg>Authorization=Bearer ${token}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-07-03T14:49:20.197590" elapsed="0.000077"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-07-03T14:49:20.197728" level="INFO">Token: Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880</msg>
+<arg>Token: Bearer ${token}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-07-03T14:49:20.197695" elapsed="0.000044"/>
+</kw>
+<return>
+<value>&amp;{headers}</value>
+<status status="PASS" start="2025-07-03T14:49:20.197751" elapsed="0.000012"/>
+</return>
+<msg time="2025-07-03T14:49:20.197802" level="INFO">${headers} = {'Authorization': 'Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880'}</msg>
+<var>${headers}</var>
+<status status="PASS" start="2025-07-03T14:49:20.197201" elapsed="0.000607"/>
+</kw>
+<kw name="Create Session" owner="RequestsLibrary">
+<msg time="2025-07-03T14:49:20.197895" level="INFO">Creating Session using : alias=gorest, url=https://gorest.co.in/public/v2, headers={'Authorization': 'Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880'},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<arg>gorest</arg>
+<arg>${BASE_URL}</arg>
+<arg>headers=${headers}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<status status="PASS" start="2025-07-03T14:49:20.197840" elapsed="0.000096"/>
+</kw>
+<kw name="Generate Random String" owner="keywords">
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-07-03T14:49:20.198085" level="INFO">${CHARS} = abcdefghijklmnopqrstuvwxyz0123456789</msg>
+<var>${CHARS}</var>
+<arg>abcdefghijklmnopqrstuvwxyz0123456789</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-07-03T14:49:20.198051" elapsed="0.000041"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-07-03T14:49:20.198224" level="INFO">${result} = 9psyf</msg>
+<var>${result}</var>
+<arg>''.join(random.choices('${CHARS}', k=${length}))</arg>
+<arg>random</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-07-03T14:49:20.198121" elapsed="0.000110"/>
+</kw>
+<return>
+<value>${result}</value>
+<status status="PASS" start="2025-07-03T14:49:20.198245" elapsed="0.000009"/>
+</return>
+<msg time="2025-07-03T14:49:20.198285" level="INFO">${random} = 9psyf</msg>
+<var>${random}</var>
+<arg>5</arg>
+<status status="PASS" start="2025-07-03T14:49:20.197981" elapsed="0.000310"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-07-03T14:49:20.198389" level="INFO">${data} = {'name': 'Test User', 'gender': 'male', 'email': 'testuser9psyf@domain.com', 'status': 'active'}</msg>
+<var>${data}</var>
+<arg>name=Test User</arg>
+<arg>gender=male</arg>
+<arg>email=testuser${random}@domain.com</arg>
+<arg>status=active</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-07-03T14:49:20.198322" elapsed="0.000074"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-07-03T14:49:21.320868" level="INFO">POST Request : url=https://gorest.co.in/public/v2/users 
+ path_url=/public/v2/users 
+ headers={'User-Agent': 'python-requests/2.32.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880', 'Content-Length': '96', 'Content-Type': 'application/json'} 
+ body=b'{"name": "Test User", "gender": "male", "email": "testuser9psyf@domain.com", "status": "active"}' 
+ </msg>
+<msg time="2025-07-03T14:49:21.321194" level="INFO">POST Response : url=https://gorest.co.in/public/v2/users 
+ status=201, reason=Created 
+ headers={'Date': 'Thu, 03 Jul 2025 09:19:21 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '102', 'Connection': 'keep-alive', 'Cache-Control': 'max-age=0, private, must-revalidate', 'Etag': 'W/"dd5f22019d63a6714e93159caa339320"', 'Feature-Policy': "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'", 'Location': 'https://gorest.co.in/public/v2/users/7980900', 'Referrer-Policy': 'strict-origin-when-cross-origin', 'Vary': 'Origin', 'X-Content-Type-Options': 'nosniff', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-Ratelimit-Limit': '90', 'X-Ratelimit-Remaining': '81', 'X-Ratelimit-Reset': '1', 'X-Request-Id': '1a0a0bf1-d04e-4d3b-ba39-25f4e5280d7c', 'X-Runtime': '0.100107', 'X-Xss-Protection': '0', 'Cf-Cache-Status': 'DYNAMIC', 'Nel': '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}', 'Report-To': '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=Y104xLOzmd0WNLs8zjibeIqIPh6%2B%2F7iifMnodp3bB73f6W0QPFLl86HAqQhCWrTF7P2%2BNZbykeCV9OQfZe%2FigAv8FI9z2R%2BgZF7P3w%3D%3D"}]}', 'Server': 'cloudflare', 'CF-RAY': '95954cfa0975dad4-MRS', 'alt-svc': 'h3=":443"; ma=86400'} 
+ body={"id":7980900,"name":"Test User","email":"testuser9psyf@domain.com","gender":"male","status":"active"} 
+ </msg>
+<msg time="2025-07-03T14:49:21.321381" level="INFO">/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/urllib3/connectionpool.py:1097: InsecureRequestWarning: Unverified HTTPS request is being made to host 'gorest.co.in'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-07-03T14:49:21.321756" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<var>${response}</var>
+<arg>gorest</arg>
+<arg>/users</arg>
+<arg>json=${data}</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-07-03T14:49:20.198464" elapsed="1.123353"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2025-07-03T14:49:21.324301" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${response.status_code}</arg>
+<arg>201</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2025-07-03T14:49:21.322237" elapsed="0.002194"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>${response.content}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2025-07-03T14:49:21.324664" elapsed="0.000922"/>
+</kw>
+<kw name="Convert String To Json" owner="JSONLibrary">
+<msg time="2025-07-03T14:49:21.326367" level="INFO">${json} = {'id': 7980900, 'name': 'Test User', 'email': 'testuser9psyf@domain.com', 'gender': 'male', 'status': 'active'}</msg>
+<var>${json}</var>
+<arg>${response.content}</arg>
+<doc>Convert String to JSON object</doc>
+<status status="PASS" start="2025-07-03T14:49:21.325828" elapsed="0.000567"/>
+</kw>
+<return>
+<value>${json['id']}</value>
+<status status="PASS" start="2025-07-03T14:49:21.326443" elapsed="0.000039"/>
+</return>
+<msg time="2025-07-03T14:49:21.326864" level="INFO">${user_id} = 7980900</msg>
+<var>${user_id}</var>
+<status status="PASS" start="2025-07-03T14:49:20.197104" elapsed="1.129782"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2025-07-03T14:49:21.688331" level="INFO">GET Request : url=https://gorest.co.in/public/v2/users/7980900 
+ path_url=/public/v2/users/7980900 
+ headers={'User-Agent': 'python-requests/2.32.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880'} 
+ body=None 
+ </msg>
+<msg time="2025-07-03T14:49:21.688501" level="INFO">GET Response : url=https://gorest.co.in/public/v2/users/7980900 
+ status=200, reason=OK 
+ headers={'Date': 'Thu, 03 Jul 2025 09:19:21 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Cache-Control': 'max-age=0, private, must-revalidate', 'Etag': 'W/"dd5f22019d63a6714e93159caa339320"', 'Feature-Policy': "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'", 'Referrer-Policy': 'strict-origin-when-cross-origin', 'Vary': 'Origin', 'X-Content-Type-Options': 'nosniff', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-Ratelimit-Limit': '90', 'X-Ratelimit-Remaining': '89', 'X-Ratelimit-Reset': '2', 'X-Request-Id': '322f599d-b078-4bd3-b1c3-a43e6cf814fb', 'X-Runtime': '0.049216', 'X-Xss-Protection': '0', 'Cf-Cache-Status': 'DYNAMIC', 'Nel': '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}', 'Report-To': '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=CHa7ql5tBxuK7JaMTO%2FLmSlPFGlsIOZPwwYGkuTP706A4NhHtWa%2BiDk26cimh3Vk79IX1oCviL64nFTGGtUq2FvYdI7VbJDx96JP4A%3D%3D"}]}', 'Content-Encoding': 'gzip', 'Server': 'cloudflare', 'CF-RAY': '95954cff0f24dad4-MRS', 'alt-svc': 'h3=":443"; ma=86400'} 
+ body={"id":7980900,"name":"Test User","email":"testuser9psyf@domain.com","gender":"male","status":"active"} 
+ </msg>
+<msg time="2025-07-03T14:49:21.688605" level="INFO">/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/urllib3/connectionpool.py:1097: InsecureRequestWarning: Unverified HTTPS request is being made to host 'gorest.co.in'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-07-03T14:49:21.688866" level="INFO">${get_response} = &lt;Response [200]&gt;</msg>
+<var>${get_response}</var>
+<arg>gorest</arg>
+<arg>/users/${user_id}</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-07-03T14:49:21.327035" elapsed="0.361860"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>GET status: ${get_response.status_code}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2025-07-03T14:49:21.689236" elapsed="0.000641"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2025-07-03T14:49:21.690390" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${get_response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2025-07-03T14:49:21.690027" elapsed="0.000410"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>${get_response.content}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2025-07-03T14:49:21.690569" elapsed="0.000337"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-07-03T14:49:22.040525" level="INFO">POST Request : url=https://gorest.co.in/public/v2/users/7980900 
+ path_url=/public/v2/users/7980900 
+ headers={'User-Agent': 'python-requests/2.32.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2025-07-03T14:49:22.040984" level="INFO">POST Response : url=https://gorest.co.in/public/v2/users/7980900 
+ status=404, reason=Not Found 
+ headers={'Date': 'Thu, 03 Jul 2025 09:19:22 GMT', 'Content-Type': 'text/html; charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Cache-Control': 'no-cache', 'Feature-Policy': "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'", 'Link': '&lt;/assets/application-908c2251d58be479b7fb209519b40235fa8b917357737796da9f4462eea8cabe.css&gt;; rel=preload; as=style; nopush', 'Referrer-Policy': 'strict-origin-when-cross-origin', 'Vary': 'Origin', 'X-Content-Type-Options': 'nosniff', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-Request-Id': 'b9fbf985-5707-46a2-8534-86db6ae2854f', 'X-Runtime': '0.019915', 'X-Xss-Protection': '0', 'Cf-Cache-Status': 'DYNAMIC', 'Nel': '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}', 'Report-To': '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=Br9u9Z5zj7NFc6rnVN%2BfdRfxWLyx%2BWCH%2FLF0sHUFPx3ysq5NlS7wd5YVWa7V6gxNe%2BteK5Yp7MMbgwDtZlElU5rCOEtMv6ynFfyu0Q%3D%3D"}]}', 'Content-Encoding': 'gzip', 'Server': 'cloudflare', 'CF-RAY': '95954d015cf7dad4-MRS', 'alt-svc': 'h3=":443"; ma=86400'} 
+ body=&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset="utf-8" /&gt;&lt;meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport" /&gt;&lt;link href="/favicon.ico" rel="icon" type="image/x-icon" /&gt;&lt;title&gt;Page Not Found | GO REST&lt;/title&gt;&lt;link rel="stylesheet" href="/assets/application-908c2251d58be479b7fb209519b40235fa8b917357737796da9f4462eea8cabe.css" media="all" data-turbolinks-track="reload" /&gt;&lt;script src="/packs/js/application-194ed409298f13f197d2.js" data-turbolinks-track="reload" defer="defer"&gt;&lt;/script&gt;&lt;script async="true" crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4400401340006140"&gt;&lt;/script&gt;&lt;/head&gt;&lt;body&gt;&lt;nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top"&gt;&lt;div class="container"&gt;&lt;a class="navbar-brand" href="/"&gt;&lt;i class="fas fa-exchange-alt"&gt;&lt;/i&gt; Go REST&lt;/a&gt;&lt;button aria-controls="AppNavBar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#AppNavBar" data-bs-toggle="collapse" type="button"&gt;&lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;&lt;/button&gt;&lt;div class="collapse navbar-collapse" id="AppNavBar"&gt;&lt;ul class="navbar-nav ms-auto"&gt;&lt;li class="nav-item"&gt;&lt;a class="nav-link" href="/qa"&gt;&lt;i class="fas fa-life-ring"&gt;&lt;/i&gt; Help&lt;/a&gt;&lt;/li&gt;&lt;li class="nav-item"&gt;&lt;a class="nav-link" href="/rest-console"&gt;&lt;i class="fab fa-linux"&gt;&lt;/i&gt; Rest Console&lt;/a&gt;&lt;/li&gt;&lt;li class="nav-item dropdown"&gt;&lt;a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" id="ToolsDropDown" role="button"&gt;&lt;i class="fas fa-tools"&gt;&lt;/i&gt; Tools&lt;/a&gt;&lt;ul aria-labelledby="ToolsDropDown" class="dropdown-menu"&gt;&lt;li class=""&gt;&lt;a class="dropdown-item" href="/tools/base64-encode-decode"&gt;Base64 Encode/Decode&lt;/a&gt;&lt;/li&gt;&lt;li class=""&gt;&lt;a class="dropdown-item" href="/tools/url-encode-decode"&gt;Url Encode/Decode&lt;/a&gt;&lt;/li&gt;&lt;li class=""&gt;&lt;a class="dropdown-item" href="/tools/gcode-translator"&gt;G-Code Translator&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li class="nav-item"&gt;&lt;a class="nav-link" href="/consumer/login"&gt;Login&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;&lt;/nav&gt;&lt;div class="container pt-3"&gt;&lt;style type="text/css"&gt;.code-text code {color: #bdbdbd;display: block;}.code-text code b {color: #81a2be;font-weight: 900;}.code-text code em {color: #b294bb;font-style: unset;}.code-text code i {color: #b5bd68;}.code-text code span {color: #f0c674;}&lt;/style&gt;&lt;div class="card text-white border-secondary bg-dark"&gt;&lt;div class="card-header"&gt;&lt;h1 class="card-title text-warning"&gt;&lt;i class="fas fa-ghost text-white slide-right"&gt;&lt;/i&gt; HTTP: Not Found &lt;/h1&gt;&lt;/div&gt;&lt;div class="card-body"&gt;&lt;h3 class="leaad code-text"&gt;&lt;code class="mb-3"&gt;&lt;span&gt;this_page&lt;/span&gt;.&lt;em&gt;not_found&lt;/em&gt; = true&lt;/code&gt;&lt;/h3&gt;&lt;p class="lead code-text"&gt;&lt;code class="mb-2"&gt;&lt;span&gt;if&lt;/span&gt; &lt;b&gt;you_spelt_it_wrong&lt;/b&gt; &lt;br /&gt;&amp;nbsp;&amp;nbsp;&lt;span&gt;try_again&lt;/span&gt;&lt;br /&gt;&lt;/code&gt;&lt;code class="mb-2"&gt;&lt;span&gt;elsif &lt;b&gt;we_screwed_up&lt;/b&gt;&lt;/span&gt; &lt;br /&gt;&amp;nbsp;&amp;nbsp;&lt;em&gt;print&lt;/em&gt; &lt;i&gt;"We're really sorry about that."&lt;/i&gt;&lt;br/&gt;&lt;/code&gt;&lt;code class="mb-2"&gt;&lt;span&gt;end&lt;/span&gt;&lt;/code&gt;&lt;code class="mb-2"&gt;&lt;span&gt;redirect_to&lt;/span&gt; &lt;em&gt;home_page&lt;/em&gt;&lt;/code&gt;&lt;/p&gt;&lt;/div&gt;&lt;div class="card-footer"&gt;&lt;p class="text-danger"&gt;We are sorry, something went wrong. Please try again later.&lt;/p&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;hr class="mt-5" /&gt;&lt;div class="container"&gt;&lt;div class="footer"&gt;&lt;ul class="list-inline"&gt;&lt;li class="list-inline-item"&gt;&amp;copy; Go Rest 2025&lt;/li&gt;&lt;li class="list-inline-item float-lg-end"&gt;&lt;a href="/privacy-policy"&gt;Privacy Policy&lt;/a&gt;&lt;/li&gt;&lt;li class="list-inline-item float-lg-end me-3"&gt;&lt;a href="/contact-us"&gt;Contact Us&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt; 
+ </msg>
+<msg time="2025-07-03T14:49:22.041304" level="INFO">/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/urllib3/connectionpool.py:1097: InsecureRequestWarning: Unverified HTTPS request is being made to host 'gorest.co.in'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+  warnings.warn(</msg>
+<msg time="2025-07-03T14:49:22.041649" level="INFO">${post_response} = &lt;Response [404]&gt;</msg>
+<var>${post_response}</var>
+<arg>gorest</arg>
+<arg>/users/${user_id}</arg>
+<arg>expected_status=404</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-07-03T14:49:21.691017" elapsed="0.350686"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>POST status: ${post_response.status_code}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2025-07-03T14:49:22.042192" elapsed="0.001208"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2025-07-03T14:49:22.044102" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${post_response.status_code}</arg>
+<arg>404</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2025-07-03T14:49:22.043655" elapsed="0.000500"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>${post_response.content}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2025-07-03T14:49:22.044323" elapsed="0.000767"/>
+</kw>
+<tag>regression</tag>
+<status status="PASS" start="2025-07-03T14:49:20.195142" elapsed="1.850261"/>
+</test>
+<status status="PASS" start="2025-07-03T14:49:20.081239" elapsed="1.964823"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">regression</stat>
+</tag>
+<suite>
+<stat name="Unsupported HTTP Method" id="s1" pass="1" fail="0" skip="0">Unsupported HTTP Method</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

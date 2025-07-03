@@ -11,4 +11,5 @@ Create User With Extra Fields
     ${data}=    Create Dictionary    name=Extra Field    gender=male    email=extrafield${random}@domain.com    status=active    extra=shouldfail
     ${response}=    POST On Session    gorest    /users    json=${data}
     Should Be Equal As Integers    ${response.status_code}    201
+    Log To Console   ${response.content}
     Dictionary Should Not Contain Key    ${response.json()}    extra

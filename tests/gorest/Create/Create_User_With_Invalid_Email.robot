@@ -10,3 +10,4 @@ Create User With Invalid Email
     ${data}=    Create Dictionary    name=Test User    gender=male    email=invalidemail    status=active
     ${response}=    POST On Session    gorest    /users    json=${data}    expected_status=422
     Should Be Equal As Integers    ${response.status_code}    422
+    Log To Console   ${response.content}

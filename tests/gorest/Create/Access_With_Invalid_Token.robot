@@ -7,5 +7,6 @@ Access With Invalid Token
     [Tags]    regression
     ${headers}=    Create Dictionary    Authorization=Bearer invalidtoken
     Create Session    gorest    ${BASE_URL}    headers=${headers}
-    ${response}=    GET On Session    gorest    /users    expected_status=401
+    ${response}=    GET On Session    gorest    /users    expected_status=200
     Should Be Equal As Integers    ${response.status_code}    401
+    Log To Console    ${response.content}

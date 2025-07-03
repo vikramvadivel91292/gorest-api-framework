@@ -11,3 +11,4 @@ Create User With Different Genders And Statuses
     ${data}=    Create Dictionary    name=Test Female    gender=female    email=testfemale${random}@domain.com    status=inactive
     ${response}=    POST On Session    gorest    /users    json=${data}
     Should Be Equal As Integers    ${response.status_code}    201
+    Log To Console   ${response.content}

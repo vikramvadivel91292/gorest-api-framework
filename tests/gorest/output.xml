@@ -1,286 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.3.1 (Python 3.13.5 on darwin)" generated="2025-07-01T12:41:51.021922" rpa="false" schemaversion="5">
-<suite id="s1" name="get Users By Gender And Status" source="/Users/vivadivel/Desktop/gorest-api-framework/tests/gorest/get/get_Users_By_Gender_And_Status.robot">
-<test id="s1-t1" name="Get Users By Gender And Status" line="6">
-<kw name="Get Auth Headers" owner="variables">
-<kw name="Get File" owner="OperatingSystem">
-<msg time="2025-07-01T12:41:51.224838" level="INFO" html="true">Getting file '&lt;a href="file:///Users/vivadivel/Desktop/gorest-api-framework/data/token.txt"&gt;/Users/vivadivel/Desktop/gorest-api-framework/data/token.txt&lt;/a&gt;'.</msg>
-<msg time="2025-07-01T12:41:51.225320" level="INFO">${token} = c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880
-</msg>
-<var>${token}</var>
-<arg>${TOKEN_FILE}</arg>
-<doc>Returns the contents of a specified file.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.224770" elapsed="0.000565"/>
-</kw>
-<kw name="Should Not Be Empty" owner="BuiltIn">
-<msg time="2025-07-01T12:41:51.225471" level="INFO">Length is 65.</msg>
-<arg>${token}</arg>
-<arg>msg=Token file is empty</arg>
-<doc>Verifies that the given item is not empty.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.225392" elapsed="0.000096"/>
-</kw>
-<kw name="Strip String" owner="String">
-<msg time="2025-07-01T12:41:51.225583" level="INFO">${token} = c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880</msg>
-<var>${token}</var>
-<arg>${token}</arg>
-<doc>Remove leading and/or trailing whitespaces from the given string.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.225530" elapsed="0.000061"/>
-</kw>
+<robot generator="Robot 7.3.1 (Python 3.13.5 on darwin)" generated="2025-07-03T13:16:51.388785" rpa="false" schemaversion="5">
+<suite id="s1" name="Access With Invalid Token" source="/Users/vivadivel/Desktop/gorest-api-framework/tests/gorest/Create/Access_With_Invalid_Token.robot">
+<test id="s1-t1" name="Access With Invalid Token" line="6">
 <kw name="Create Dictionary" owner="BuiltIn">
-<msg time="2025-07-01T12:41:51.225736" level="INFO">&amp;{headers} = { Authorization=Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880 }</msg>
-<var>&amp;{headers}</var>
-<arg>Authorization=Bearer ${token}</arg>
-<doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.225631" elapsed="0.000114"/>
-</kw>
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-07-01T12:41:51.225816" level="INFO">Token: Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880</msg>
-<arg>Token: Bearer ${token}</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.225779" elapsed="0.000049"/>
-</kw>
-<return>
-<value>&amp;{headers}</value>
-<status status="PASS" start="2025-07-01T12:41:51.225844" elapsed="0.000020"/>
-</return>
-<msg time="2025-07-01T12:41:51.225910" level="INFO">${headers} = {'Authorization': 'Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880'}</msg>
+<msg time="2025-07-03T13:16:51.560685" level="INFO">${headers} = {'Authorization': 'Bearer invalidtoken'}</msg>
 <var>${headers}</var>
-<status status="PASS" start="2025-07-01T12:41:51.224489" elapsed="0.001428"/>
+<arg>Authorization=Bearer invalidtoken</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-07-03T13:16:51.560583" elapsed="0.000121"/>
 </kw>
 <kw name="Create Session" owner="RequestsLibrary">
-<msg time="2025-07-01T12:41:51.226063" level="INFO">Creating Session using : alias=gorest, url=https://gorest.co.in/public/v2, headers={'Authorization': 'Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880'},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<msg time="2025-07-03T13:16:51.560884" level="INFO">Creating Session using : alias=gorest, url=https://gorest.co.in/public/v2, headers={'Authorization': 'Bearer invalidtoken'},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
 <arg>gorest</arg>
 <arg>${BASE_URL}</arg>
 <arg>headers=${headers}</arg>
 <doc>Create Session: create a HTTP session to a server</doc>
-<status status="PASS" start="2025-07-01T12:41:51.225973" elapsed="0.000170"/>
-</kw>
-<kw name="Create Dictionary" owner="BuiltIn">
-<msg time="2025-07-01T12:41:51.226281" level="INFO">&amp;{params} = { gender=male | status=active }</msg>
-<var>&amp;{params}</var>
-<arg>gender=male</arg>
-<arg>status=active</arg>
-<doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.226207" elapsed="0.000084"/>
+<status status="PASS" start="2025-07-03T13:16:51.560780" elapsed="0.000197"/>
 </kw>
 <kw name="GET On Session" owner="RequestsLibrary">
-<msg time="2025-07-01T12:41:51.606119" level="INFO">GET Request : url=https://gorest.co.in/public/v2/users?gender=male&amp;status=active 
- path_url=/public/v2/users?gender=male&amp;status=active 
- headers={'User-Agent': 'python-requests/2.32.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer c4eccee2067e7369de308d498b32beea56e5299c086c5e6df38dec7a44b96880'} 
+<msg time="2025-07-03T13:16:52.679145" level="INFO">GET Request : url=https://gorest.co.in/public/v2/users 
+ path_url=/public/v2/users 
+ headers={'User-Agent': 'python-requests/2.32.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer invalidtoken'} 
  body=None 
  </msg>
-<msg time="2025-07-01T12:41:51.606310" level="INFO">GET Response : url=https://gorest.co.in/public/v2/users?gender=male&amp;status=active 
- status=200, reason=OK 
- headers={'Date': 'Tue, 01 Jul 2025 07:11:51 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Cache-Control': 'max-age=0, private, must-revalidate', 'Etag': 'W/"1811435a40e37bdd8e45f7a3eb7a041d"', 'Feature-Policy': "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'", 'Referrer-Policy': 'strict-origin-when-cross-origin', 'Vary': 'Origin', 'X-Content-Type-Options': 'nosniff', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Links-Current': 'https://gorest.co.in/public/v2/users?page=1', 'X-Links-Next': 'https://gorest.co.in/public/v2/users?page=2', 'X-Links-Previous': '', 'X-Pagination-Limit': '10', 'X-Pagination-Page': '1', 'X-Pagination-Pages': '79', 'X-Pagination-Total': '788', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-Ratelimit-Limit': '90', 'X-Ratelimit-Remaining': '89', 'X-Ratelimit-Reset': '1', 'X-Request-Id': '214876ed-9f2d-47c0-816e-1764c9de056c', 'X-Runtime': '0.109231', 'X-Xss-Protection': '0', 'Cf-Cache-Status': 'DYNAMIC', 'Nel': '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}', 'Report-To': '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=ASswhx40EcTe7rnij4fwicJQE58%2FNcPLXIlyzQDjbnwDcIapGd%2FusE71RsAeuJPRvnKT%2BUjLp1wBF5z7TOincN9j7bKWUMOmiYowjg%3D%3D"}]}', 'Content-Encoding': 'gzip', 'Server': 'cloudflare', 'CF-RAY': '9584177a9e447f2b-MAA', 'alt-svc': 'h3=":443"; ma=86400'} 
- body=[{"id":7975899,"name":"Enakshi Khanna","email":"enakshi_khanna@schowalter.test","gender":"male","status":"active"},{"id":7975891,"name":"Laal Dutta","email":"laal_dutta@johnson-kutch.test","gender":"male","status":"active"},{"id":7975890,"name":"Sen. Akroor Dhawan","email":"dhawan_akroor_sen@reynolds.example","gender":"male","status":"active"},{"id":7975885,"name":"Archan Pillai","email":"archan_pillai@keeling.test","gender":"male","status":"active"},{"id":7975879,"name":"Triloki Asan LLD","email":"triloki_lld_asan@bahringer.test","gender":"male","status":"active"},{"id":7975878,"name":"Vasudha Devar","email":"vasudha_devar@grant.test","gender":"male","status":"active"},{"id":7975874,"name":"Darshan Mehra LLD","email":"lld_mehra_darshan@prosacco-reinger.test","gender":"male","status":"active"},{"id":7975861,"name":"Gov. Anish Ganaka","email":"anish_ganaka_gov@reilly.test","gender":"male","status":"active"},{"id":7975859,"name":"Mr. Chandraprabha Kaul","email":"mr_kaul_chandraprabha@quitzon-murray.example","gender":"male","status":"active"},{"id":7975833,"name":"Aasha Bhattacharya","email":"bhattacharya_aasha@von-marks.example","gender":"male","status":"active"}] 
+<msg time="2025-07-03T13:16:52.679506" level="INFO">GET Response : url=https://gorest.co.in/public/v2/users 
+ status=401, reason=Unauthorized 
+ headers={'Date': 'Thu, 03 Jul 2025 07:46:52 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '27', 'Connection': 'keep-alive', 'Cache-Control': 'no-cache', 'Feature-Policy': "camera 'none'; gyroscope 'none'; microphone 'none'; usb 'none'; fullscreen 'self'", 'Referrer-Policy': 'strict-origin-when-cross-origin', 'Vary': 'Origin', 'X-Content-Type-Options': 'nosniff', 'X-Download-Options': 'noopen', 'X-Frame-Options': 'SAMEORIGIN', 'X-Permitted-Cross-Domain-Policies': 'none', 'X-Request-Id': '456fd2da-2a86-4cfe-8091-99eddd7c964e', 'X-Runtime': '0.027007', 'X-Xss-Protection': '0', 'Cf-Cache-Status': 'DYNAMIC', 'Nel': '{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}', 'Report-To': '{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=Y3Bmyw0hWRtxQ%2BI5YxAYAs7MScArqeTI38P3f%2FQ6AGj7eMDRvsh5qPDdWse724RcpVC6WM4n7FsZSwbEdobBVtJ9R%2B6%2F%2BlIetMY%3D"}]}', 'Server': 'cloudflare', 'CF-RAY': '9594c58368cf4fea-MRS', 'alt-svc': 'h3=":443"; ma=86400'} 
+ body={"message":"Invalid token"} 
  </msg>
-<msg time="2025-07-01T12:41:51.606393" level="INFO">/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/urllib3/connectionpool.py:1097: InsecureRequestWarning: Unverified HTTPS request is being made to host 'gorest.co.in'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
+<msg time="2025-07-03T13:16:52.679715" level="INFO">/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/urllib3/connectionpool.py:1097: InsecureRequestWarning: Unverified HTTPS request is being made to host 'gorest.co.in'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
   warnings.warn(</msg>
-<msg time="2025-07-01T12:41:51.606568" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<msg time="2025-07-03T13:16:52.680209" level="FAIL">Url: https://gorest.co.in/public/v2/users Expected status: 401 != 200</msg>
 <var>${response}</var>
 <arg>gorest</arg>
 <arg>/users</arg>
-<arg>params=${params}</arg>
+<arg>expected_status=200</arg>
 <doc>Sends a GET request on a previously created HTTP Session.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.226339" elapsed="0.380247"/>
+<status status="FAIL" start="2025-07-03T13:16:51.561039" elapsed="1.126421">Url: https://gorest.co.in/public/v2/users Expected status: 401 != 200</status>
 </kw>
 <kw name="Should Be Equal As Integers" owner="BuiltIn">
-<msg time="2025-07-01T12:41:51.607254" level="INFO">Argument types are:
-&lt;class 'int'&gt;
-&lt;class 'str'&gt;</msg>
 <arg>${response.status_code}</arg>
-<arg>200</arg>
+<arg>401</arg>
 <doc>Fails if objects are unequal after converting them to integers.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.606807" elapsed="0.000489"/>
+<status status="NOT RUN" start="2025-07-03T13:16:52.688334" elapsed="0.000107"/>
 </kw>
-<kw name="Convert String To Json" owner="JSONLibrary">
-<msg time="2025-07-01T12:41:51.607827" level="INFO">${json} = [{'id': 7975899, 'name': 'Enakshi Khanna', 'email': 'enakshi_khanna@schowalter.test', 'gender': 'male', 'status': 'active'}, {'id': 7975891, 'name': 'Laal Dutta', 'email': 'laal_dutta@johnson-kutch.te...</msg>
-<var>${json}</var>
-<arg>${response.content}</arg>
-<doc>Convert String to JSON object</doc>
-<status status="PASS" start="2025-07-01T12:41:51.607502" elapsed="0.000342"/>
-</kw>
-<for flavor="IN">
-<iter>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['gender']}</arg>
-<arg>male</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.608104" elapsed="0.000264"/>
-</kw>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['status']}</arg>
-<arg>active</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.608434" elapsed="0.000235"/>
-</kw>
-<var name="${user}">{'id': 7975899, 'name': 'Enakshi Khanna', 'email': 'enakshi_khanna@schowalter.test', 'gender': 'male', 'status': 'active'}</var>
-<status status="PASS" start="2025-07-01T12:41:51.608042" elapsed="0.000650"/>
-</iter>
-<iter>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['gender']}</arg>
-<arg>male</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.608801" elapsed="0.000204"/>
-</kw>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['status']}</arg>
-<arg>active</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.609058" elapsed="0.000195"/>
-</kw>
-<var name="${user}">{'id': 7975891, 'name': 'Laal Dutta', 'email': 'laal_dutta@johnson-kutch.test', 'gender': 'male', 'status': 'active'}</var>
-<status status="PASS" start="2025-07-01T12:41:51.608756" elapsed="0.000516"/>
-</iter>
-<iter>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['gender']}</arg>
-<arg>male</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.609362" elapsed="0.000200"/>
-</kw>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['status']}</arg>
-<arg>active</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.609614" elapsed="0.000196"/>
-</kw>
-<var name="${user}">{'id': 7975890, 'name': 'Sen. Akroor Dhawan', 'email': 'dhawan_akroor_sen@reynolds.example', 'gender': 'male', 'status': 'active'}</var>
-<status status="PASS" start="2025-07-01T12:41:51.609320" elapsed="0.000509"/>
-</iter>
-<iter>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['gender']}</arg>
-<arg>male</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.609913" elapsed="0.000198"/>
-</kw>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['status']}</arg>
-<arg>active</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.610248" elapsed="0.000195"/>
-</kw>
-<var name="${user}">{'id': 7975885, 'name': 'Archan Pillai', 'email': 'archan_pillai@keeling.test', 'gender': 'male', 'status': 'active'}</var>
-<status status="PASS" start="2025-07-01T12:41:51.609872" elapsed="0.000589"/>
-</iter>
-<iter>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['gender']}</arg>
-<arg>male</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.610545" elapsed="0.000193"/>
-</kw>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['status']}</arg>
-<arg>active</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.610789" elapsed="0.000193"/>
-</kw>
-<var name="${user}">{'id': 7975879, 'name': 'Triloki Asan LLD', 'email': 'triloki_lld_asan@bahringer.test', 'gender': 'male', 'status': 'active'}</var>
-<status status="PASS" start="2025-07-01T12:41:51.610504" elapsed="0.000497"/>
-</iter>
-<iter>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['gender']}</arg>
-<arg>male</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.611081" elapsed="0.000197"/>
-</kw>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['status']}</arg>
-<arg>active</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.611329" elapsed="0.000192"/>
-</kw>
-<var name="${user}">{'id': 7975878, 'name': 'Vasudha Devar', 'email': 'vasudha_devar@grant.test', 'gender': 'male', 'status': 'active'}</var>
-<status status="PASS" start="2025-07-01T12:41:51.611042" elapsed="0.000497"/>
-</iter>
-<iter>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['gender']}</arg>
-<arg>male</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.611622" elapsed="0.000202"/>
-</kw>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['status']}</arg>
-<arg>active</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.611878" elapsed="0.000193"/>
-</kw>
-<var name="${user}">{'id': 7975874, 'name': 'Darshan Mehra LLD', 'email': 'lld_mehra_darshan@prosacco-reinger.test', 'gender': 'male', 'status': 'active'}</var>
-<status status="PASS" start="2025-07-01T12:41:51.611581" elapsed="0.000508"/>
-</iter>
-<iter>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['gender']}</arg>
-<arg>male</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.612173" elapsed="0.000193"/>
-</kw>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['status']}</arg>
-<arg>active</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.612418" elapsed="0.000502"/>
-</kw>
-<var name="${user}">{'id': 7975861, 'name': 'Gov. Anish Ganaka', 'email': 'anish_ganaka_gov@reilly.test', 'gender': 'male', 'status': 'active'}</var>
-<status status="PASS" start="2025-07-01T12:41:51.612132" elapsed="0.000807"/>
-</iter>
-<iter>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['gender']}</arg>
-<arg>male</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.613023" elapsed="0.000307"/>
-</kw>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['status']}</arg>
-<arg>active</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.613408" elapsed="0.000257"/>
-</kw>
-<var name="${user}">{'id': 7975859, 'name': 'Mr. Chandraprabha Kaul', 'email': 'mr_kaul_chandraprabha@quitzon-murray.example', 'gender': 'male', 'status': 'active'}</var>
-<status status="PASS" start="2025-07-01T12:41:51.612982" elapsed="0.000705"/>
-</iter>
-<iter>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['gender']}</arg>
-<arg>male</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.613794" elapsed="0.000271"/>
-</kw>
-<kw name="Should Be Equal" owner="BuiltIn">
-<arg>${user['status']}</arg>
-<arg>active</arg>
-<doc>Fails if the given objects are unequal.</doc>
-<status status="PASS" start="2025-07-01T12:41:51.614138" elapsed="0.000208"/>
-</kw>
-<var name="${user}">{'id': 7975833, 'name': 'Aasha Bhattacharya', 'email': 'bhattacharya_aasha@von-marks.example', 'gender': 'male', 'status': 'active'}</var>
-<status status="PASS" start="2025-07-01T12:41:51.613746" elapsed="0.000618"/>
-</iter>
-<var>${user}</var>
-<value>@{json}</value>
-<status status="PASS" start="2025-07-01T12:41:51.607920" elapsed="0.006460"/>
-</for>
 <tag>regression</tag>
-<tag>smoke</tag>
-<status status="PASS" start="2025-07-01T12:41:51.224197" elapsed="0.390297"/>
+<status status="FAIL" start="2025-07-03T13:16:51.560180" elapsed="1.128795">Url: https://gorest.co.in/public/v2/users Expected status: 401 != 200</status>
 </test>
-<status status="PASS" start="2025-07-01T12:41:51.022688" elapsed="0.592076"/>
+<status status="FAIL" start="2025-07-03T13:16:51.389534" elapsed="1.300289"/>
 </suite>
 <statistics>
 <total>
-<stat pass="1" fail="0" skip="0">All Tests</stat>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
 </total>
 <tag>
-<stat pass="1" fail="0" skip="0">regression</stat>
-<stat pass="1" fail="0" skip="0">smoke</stat>
+<stat pass="0" fail="1" skip="0">regression</stat>
 </tag>
 <suite>
-<stat name="get Users By Gender And Status" id="s1" pass="1" fail="0" skip="0">get Users By Gender And Status</stat>
+<stat name="Access With Invalid Token" id="s1" pass="0" fail="1" skip="0">Access With Invalid Token</stat>
 </suite>
 </statistics>
 <errors>
