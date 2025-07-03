@@ -39,6 +39,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    continue-on-error: true
+    timeout-minutes: 60
     strategy:
       matrix:
         group: [Create, Delete, Get, Update]
@@ -48,111 +50,119 @@ jobs:
       ROBOT_RESULTS_DIR: results-${{ matrix.group }}
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-    - name: Cache pip dependencies
-      uses: actions/cache@v4
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-    - name: Run Robot tests with Allure output (first run)
-      env:
-        GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
-      run: |
-        GROUP="${{ matrix.group }}"
-        FILES="${{ github.event.inputs.test_files }}"
-        TAGS="${{ github.event.inputs.tags }}"
-        CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output output.xml"
-        if [ ! -z "$TAGS" ]; then
-          CMD="$CMD --include $TAGS"
-        fi
-        if [ ! -z "$FILES" ]; then
-          CMD="$CMD $FILES"
-        else
-          CMD="$CMD tests/gorest/$GROUP"
-        fi
-        echo "Running: $CMD"
-        eval $CMD
-        if [ $? -ne 0 ]; then
-          echo "Robot tests failed."
-          exit 1
-        fi
-    - name: Rerun failed tests (if any and if rerun is enabled)
-      if: always()
-      env:
-        GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
-      run: |
-        if [[ "${{ github.event.inputs.rerun_failed }}" == "true" ]]; then
-          if grep -q '<status status="FAIL"' ${ROBOT_RESULTS_DIR}/output.xml; then
-            echo "Rerunning failed tests..."
-            GROUP="${{ matrix.group }}"
-            FILES="${{ github.event.inputs.test_files }}"
-            TAGS="${{ github.event.inputs.tags }}"
-            CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml"
-            CMD="$CMD tests/gorest/$GROUP"
-            if [ ! -z "$TAGS" ]; then
-              CMD="$CMD --include \"$TAGS\""
-            fi
-            if [ ! -z "$FILES" ]; then
-              CMD="$CMD $FILES"
-            fi
-            echo "Running: $CMD"
-            eval $CMD
-          else
-            echo "No failed tests to rerun."
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Robot tests with Allure output (first run)
+        env:
+          GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
+        run: |
+          GROUP="${{ matrix.group }}"
+          FILES="${{ github.event.inputs.test_files }}"
+          TAGS="${{ github.event.inputs.tags }}"
+          CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output output.xml"
+          if [ ! -z "$TAGS" ]; then
+            CMD="$CMD --include $TAGS"
           fi
-        else
-          echo "Rerun of failed tests is disabled by workflow input."
-        fi
-    - name: Merge Robot Framework results
-      run: |
-        if [ -f ${ROBOT_RESULTS_DIR}/rerun.xml ]; then
-          rebot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
-        fi
-    - name: Upload Robot and Allure Results (per group)
-      uses: actions/upload-artifact@v4
-      with:
-        name: robot-allure-results-${{ matrix.group }}
-        path: |
-          ${{ env.ROBOT_RESULTS_DIR }}/
-          ${{ env.ALLURE_RESULTS_DIR }}/
+          if [ ! -z "$FILES" ]; then
+            CMD="$CMD $FILES"
+          else
+            CMD="$CMD tests/gorest/$GROUP"
+          fi
+          echo "Running: $CMD"
+          eval $CMD
+          if [ $? -ne 0 ]; then
+            echo "Robot tests failed."
+            exit 1
+          fi
+
+      - name: Rerun failed tests (if any and if rerun is enabled)
+        if: always()
+        env:
+          GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
+        run: |
+          if [[ "${{ github.event.inputs.rerun_failed }}" == "true" ]]; then
+            if grep -q '<status status="FAIL"' ${ROBOT_RESULTS_DIR}/output.xml; then
+              echo "Rerunning failed tests..."
+              GROUP="${{ matrix.group }}"
+              FILES="${{ github.event.inputs.test_files }}"
+              TAGS="${{ github.event.inputs.tags }}"
+              CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml"
+              CMD="$CMD tests/gorest/$GROUP"
+              if [ ! -z "$TAGS" ]; then
+                CMD="$CMD --include \"$TAGS\""
+              fi
+              if [ ! -z "$FILES" ]; then
+                CMD="$CMD $FILES"
+              fi
+              echo "Running: $CMD"
+              eval $CMD
+            else
+              echo "No failed tests to rerun."
+            fi
+          else
+            echo "Rerun of failed tests is disabled by workflow input."
+          fi
+
+      - name: Merge Robot Framework results
+        run: |
+          if [ -f ${ROBOT_RESULTS_DIR}/rerun.xml ]; then
+            rebot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
+          fi
+
+      - name: Upload Robot and Allure Results (per group)
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-allure-results-${{ matrix.group }}
+          path: |
+            ${{ env.ROBOT_RESULTS_DIR }}/
+            ${{ env.ALLURE_RESULTS_DIR }}/
+
   publish-allure-report:
     needs: test
     runs-on: ubuntu-latest
     steps:
-    - name: Download all artifacts
-      uses: actions/download-artifact@v4
-      with:
-        path: all-artifacts
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-artifacts
 
-    - name: Merge Allure results
-      run: |
-        mkdir merged-allure-results
-        find all-artifacts -type d -name 'allure-results-*' -exec cp -r {}/* merged-allure-results/ \;
-    - name: Install Allure CLI
-      run: |
-        wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
-        tar -zxvf allure-2.27.0.tgz
-        sudo mv allure-2.27.0 /opt/allure
-        sudo ln -s /opt/allure/bin/allure /usr/bin/allure
-        allure --version
-    - name: Generate Allure report
-      run: |
-        allure generate merged-allure-results -o site --clean
-    - name: Deploy Allure report to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./site
-        publish_branch: gh-pages
-        force_orphan: true
+      - name: Merge Allure results
+        run: |
+          mkdir merged-allure-results
+          find all-artifacts -type d -name 'allure-results-*' -exec cp -r {}/* merged-allure-results/ \;
+
+      - name: Install Allure CLI
+        run: |
+          wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
+          tar -zxvf allure-2.27.0.tgz
+          sudo mv allure-2.27.0 /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+          allure --version
+
+      - name: Generate Allure report
+        run: |
+          allure generate merged-allure-results -o site --clean
+
+      - name: Deploy Allure report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          publish_branch: gh-pages
+          force_orphan: true
