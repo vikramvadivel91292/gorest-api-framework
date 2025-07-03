@@ -187,14 +187,6 @@ jobs:
         echo "1. Download the 'allure-report' artifact from the Artifacts section above." >> $GITHUB_STEP_SUMMARY
         echo "2. Extract the archive and open the 'index.html' file in your browser." >> $GITHUB_STEP_SUMMARY
 
-    # - name: Deploy Allure report to GitHub Pages
-    #  uses: peaceiris/actions-gh-pages@v4
-    #  with:
-    #    github_token: ${{ secrets.GITHUB_TOKEN }}
-    #    publish_dir: ./site
-    #    publish_branch: gh-pages
-    #    force_orphan: true
-
   rerun-failed:
     name: Rerun Only Failed Tests (Separate Workflow)
     continue-on-error: true
@@ -245,3 +237,45 @@ jobs:
         with:
           name: allure-rerun-results-${{ github.event.inputs.rerun_group }}
           path: ${{ env.ALLURE_RESULTS_DIR }}/
+
+  generate-rerun-allure-report:
+    name: Generate Allure Report for Rerun Group Only
+    needs: rerun-failed
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.rerun_group != '' }}
+    env:
+      GROUP: ${{ github.event.inputs.rerun_group }}
+      ALLURE_RESULTS_DIR: allure-results-${{ github.event.inputs.rerun_group }}
+    steps:
+      - name: Download Allure rerun results for group
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-rerun-results-${{ github.event.inputs.rerun_group }}
+          path: ${{ env.ALLURE_RESULTS_DIR }}
+
+      - name: Install Allure CLI
+        run: |
+          wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
+          tar -zxvf allure-2.27.0.tgz
+          sudo mv allure-2.27.0 /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+          allure --version
+
+      - name: Generate Allure report for rerun group
+        run: |
+          allure generate ${{ env.ALLURE_RESULTS_DIR }} -o site --clean
+
+      - name: Upload Allure HTML report for rerun group as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-rerun-report-${{ env.GROUP }}
+          path: ./site
+
+      - name: Add rerun group Allure Report summary to workflow
+        run: |
+          echo "## Allure Rerun Report for Group: $GROUP" >> $GITHUB_STEP_SUMMARY
+          echo "The Allure HTML report for the rerun group is available as a downloadable artifact in this workflow run (see 'allure-rerun-report-$GROUP' in the Artifacts section above)." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "To view the rerun report:" >> $GITHUB_STEP_SUMMARY
+          echo "1. Download the 'allure-rerun-report-$GROUP' artifact from the Artifacts section above." >> $GITHUB_STEP_SUMMARY
+          echo "2. Extract the archive and open the 'index.html' file in your browser." >> $GITHUB_STEP_SUMMARY
