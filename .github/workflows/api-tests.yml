@@ -186,6 +186,7 @@ jobs:
         echo "To view the report:" >> $GITHUB_STEP_SUMMARY
         echo "1. Download the 'allure-report' artifact from the Artifacts section above." >> $GITHUB_STEP_SUMMARY
         echo "2. Extract the archive and open the 'index.html' file in your browser." >> $GITHUB_STEP_SUMMARY
+        cat $GITHUB_STEP_SUMMARY # Debugging line to print the summary content to the logs
 
   rerun-failed:
     name: Rerun Only Failed Tests (Separate Workflow)
@@ -279,3 +280,4 @@ jobs:
           echo "To view the rerun report:" >> $GITHUB_STEP_SUMMARY
           echo "1. Download the 'allure-rerun-report-$GROUP' artifact from the Artifacts section above." >> $GITHUB_STEP_SUMMARY
           echo "2. Extract the archive and open the 'index.html' file in your browser." >> $GITHUB_STEP_SUMMARY
+          cat $GITHUB_STEP_SUMMARY # Debugging line to print the summary content to the logs
