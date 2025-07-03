@@ -160,6 +160,10 @@ jobs:
         mkdir merged-allure-results
         find all-artifacts -type d -name 'allure-results-*' -exec cp -r {}/* merged-allure-results/ \;
 
+    # --- ADD: List merged Allure results directory for debugging ---
+    - name: List merged Allure results directory
+      run: ls -lR merged-allure-results
+
     - name: Install Allure CLI
       run: |
         wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
@@ -171,6 +175,10 @@ jobs:
     - name: Generate Allure report
       run: |
         allure generate merged-allure-results -o site --clean
+
+    # --- ADD: List Allure report directory for debugging ---
+    - name: List Allure report directory
+      run: ls -lR site
 
     - name: Upload Allure HTML report as artifact
       uses: actions/upload-artifact@v4
@@ -265,6 +273,9 @@ jobs:
       - name: Generate Allure report for rerun group
         run: |
           allure generate ${{ env.ALLURE_RESULTS_DIR }} -o site --clean
+
+      - name: List Allure report directory for rerun group
+        run: ls -lR site
 
       - name: Upload Allure HTML report for rerun group as artifact
         uses: actions/upload-artifact@v4
