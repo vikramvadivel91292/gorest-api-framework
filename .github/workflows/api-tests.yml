@@ -208,21 +208,14 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Download Allure results artifacts (rerun only or normal)
-        run: |
-          if [[ "${{ github.event.inputs.rerun_failed }}" == "true" ]]; then
-            echo "Downloading rerun-failed Allure results..."
-            for group in Create Delete Get Update; do
-              gh run download ${{ github.run_id }} -n robot-allure-results-$group --dir all-artifacts/
-            done
-          else
-            echo "Downloading normal test Allure results..."
-            for group in Create Delete Get Update; do
-              gh run download ${{ github.run_id }} -n robot-allure-results-$group --dir all-artifacts/
-            done
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Allure results artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: robot-allure-results-*
+          path: all-artifacts
 
 
       - name: Merge Allure results
