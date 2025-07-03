@@ -33,6 +33,11 @@ on:
         description: 'Rerun failed tests? (true/false)'
         required: false
         default: ''
+      rerun_group:
+        description: 'Test group to rerun failed tests for (Create, Delete, Get, Update)'
+        required: false
+        default: ''
+
   schedule:
     - cron: '0 8 * * *' # Every day at 8 AM UTC
 
@@ -132,6 +137,12 @@ jobs:
           ${{ env.ROBOT_RESULTS_DIR }}/
           ${{ env.ALLURE_RESULTS_DIR }}/
 
+    - name: Upload output.xml for rerun (per group)
+      uses: actions/upload-artifact@v4
+      with:
+        name: robot-output-${{ matrix.group }}
+        path: ${{ env.ROBOT_RESULTS_DIR }}/output.xml
+
   publish-allure-report:
     needs: test
     runs-on: ubuntu-latest
@@ -165,3 +176,52 @@ jobs:
         publish_dir: ./site
         publish_branch: gh-pages
         force_orphan: true
+
+  rerun-failed:
+    name: Rerun Only Failed Tests (Separate Workflow)
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.rerun_group != '' }}
+    env:
+      GROUP: ${{ github.event.inputs.rerun_group }}
+      ALLURE_RESULTS_DIR: allure-results-${{ github.event.inputs.rerun_group }}
+      ROBOT_RESULTS_DIR: results-${{ github.event.inputs.rerun_group }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Download previous Robot output.xml
+        uses: actions/download-artifact@v4
+        with:
+          name: robot-output-${{ github.event.inputs.rerun_group }}
+          path: ${{ env.ROBOT_RESULTS_DIR }}
+
+      - name: Rerun only failed tests for selected group
+        env:
+          GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
+        run: |
+          robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} \
+                -d ${ROBOT_RESULTS_DIR} \
+                --output rerun.xml \
+                --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml \
+                tests/gorest/${GROUP}
+
+      - name: Upload rerun results
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-rerun-results-${{ github.event.inputs.rerun_group }}
+          path: ${{ env.ROBOT_RESULTS_DIR }}/rerun.xml
+
+      - name: Upload Allure rerun results
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-rerun-results-${{ github.event.inputs.rerun_group }}
+          path: ${{ env.ALLURE_RESULTS_DIR }}/
