@@ -30,14 +30,16 @@ on:
         required: false
         default: ''
       rerun_failed:
-        description: 'Rerun failed tests? (true/false)'
+        description: 'Rerun failed tests only from previous run? (true/false)'
         required: false
         default: ''
+
   schedule:
     - cron: '0 8 * * *' # Every day at 8 AM UTC
 
 jobs:
   test:
+    if: ${{ github.event.inputs.rerun_failed != 'true' }}
     runs-on: ubuntu-latest
     continue-on-error: true
     timeout-minutes: 60
@@ -134,20 +136,99 @@ jobs:
             ${{ env.ROBOT_RESULTS_DIR }}/
             ${{ env.ALLURE_RESULTS_DIR }}/
 
-  publish-allure-report:
-    needs: test
+      - name: Upload output.xml (per group)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-output-${{ matrix.group }}
+          path: ${{ env.ROBOT_RESULTS_DIR }}/output.xml
+
+  rerun-failed:
+    if: ${{ github.event.inputs.rerun_failed == 'true' }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        group: [Create, Delete, Get, Update]
+      max-parallel: 2
+    env:
+      ALLURE_RESULTS_DIR: allure-results-${{ matrix.group }}
+      ROBOT_RESULTS_DIR: results-${{ matrix.group }}
+
     steps:
-      - name: Download all artifacts
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Download previous output.xml for ${{ matrix.group }}
         uses: actions/download-artifact@v4
         with:
-          path: all-artifacts
+          name: robot-output-${{ matrix.group }}
+          path: ${{ env.ROBOT_RESULTS_DIR }}
+
+      - name: Rerun failed tests if output.xml exists
+        id: rerun
+        env:
+          GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
+        run: |
+          if [ -f "${ROBOT_RESULTS_DIR}/output.xml" ]; then
+            echo "Found previous output.xml for group ${{ matrix.group }}. Rerunning failed tests..."
+            robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml tests/gorest/${{ matrix.group }}
+            # Merge results
+            rebot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
+          else
+            echo "No previous output.xml found for group ${{ matrix.group }}. Skipping rerun."
+            echo "skip-group=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload Robot and Allure Results (per group)
+        if: steps.rerun.outputs.skip-group != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-allure-results-${{ matrix.group }}
+          path: |
+            ${{ env.ROBOT_RESULTS_DIR }}/
+            ${{ env.ALLURE_RESULTS_DIR }}/
+
+  publish-allure-report:
+    needs: [test, rerun-failed]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Allure results artifacts (rerun only or normal)
+        run: |
+          if [[ "${{ github.event.inputs.rerun_failed }}" == "true" ]]; then
+            echo "Downloading rerun-failed Allure results..."
+            for group in Create Delete Get Update; do
+              gh run download ${{ github.run_id }} -n robot-allure-results-$group --dir all-artifacts/
+            done
+          else
+            echo "Downloading normal test Allure results..."
+            for group in Create Delete Get Update; do
+              gh run download ${{ github.run_id }} -n robot-allure-results-$group --dir all-artifacts/
+            done
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: Merge Allure results
         run: |
           mkdir -p merged-allure-results
           find all-artifacts -type d -name 'allure-results-*' | while read dir; do
-          cp -v $dir/* merged-allure-results/ 2>/dev/null || true
+            cp -v $dir/* merged-allure-results/ 2>/dev/null || true
           done
           echo "Contents of merged-allure-results:"
           ls -l merged-allure-results
@@ -155,12 +236,6 @@ jobs:
       - name: Merge Allure results
         run: ls -l merged-allure-results || echo "No merged Allure results found"
 
-      - name: List Allure results directory (per group)
-        if: always()
-        run: ls -lR ${{ env.ALLURE_RESULTS_DIR }} || echo "No Allure results directory"
-
-      - name: List downloaded artifacts
-        run: ls -lR all-artifacts || echo "No artifacts directory found"
       - name: Install Allure CLI
         run: |
           wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
