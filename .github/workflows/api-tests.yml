@@ -137,24 +137,7 @@ jobs:
         run: |
           if [ -f ${ROBOT_RESULTS_DIR}/rerun.xml ]; then
             python -m robot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
-          fi
-
-      - name: Add rerun metadata to report
-        run: |
-          if [ -f ${ROBOT_RESULTS_DIR}/output.xml ]; then
-            python -m robot --output ${ROBOT_RESULTS_DIR}/output.xml \
-                  --setmetadata "Rerun" "true" \
-                  ${ROBOT_RESULTS_DIR}/output.xml
-          fi
-
-      - name: Add timestamp metadata to report
-        run: |
-          if [ -f ${ROBOT_RESULTS_DIR}/output.xml ]; then
-            TS=$(date +'%Y-%m-%d %H:%M:%S')
-            python -m robot --output ${ROBOT_RESULTS_DIR}/output.xml \
-                  --setmetadata "Rerun Timestamp" "$TS" \
-                  ${ROBOT_RESULTS_DIR}/output.xml
-          fi    
+          fi  
 
       - name: Upload Robot and Allure Results (per group)
         if: always()
