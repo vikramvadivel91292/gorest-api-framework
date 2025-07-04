@@ -82,22 +82,41 @@ jobs:
         run: |
           rm -rf ${{ env.ALLURE_RESULTS_DIR }} ${{ env.ROBOT_RESULTS_DIR }}
       
+      - name: Filter test files for this group
+        id: filter
+        run: |
+          FILES="${{ github.event.inputs.test_files }}"
+          GROUP="${{ matrix.group }}"
+          # Filter files that contain the group name (case-sensitive)
+          FILTERED=""
+          for file in $FILES; do
+            if [[ "$file" == *"/$GROUP/"* ]]; then
+              FILTERED="$FILTERED $file"
+            fi
+          done
+          FILTERED=$(echo $FILTERED | xargs)  # Trim whitespace
+          echo "filtered_files=$FILTERED" >> $GITHUB_OUTPUT
+
+      - name: Skip group if no matching files
+        if: ${{ steps.filter.outputs.filtered_files == '' }}
+        run: |
+          echo "No matching test files for group ${{ matrix.group }}, skipping."
+          mkdir -p ${{ env.ROBOT_RESULTS_DIR }}
+          echo "<robot/>" > ${{ env.ROBOT_RESULTS_DIR }}/output.xml
+          exit 0
+
       - name: Run Robot tests with Allure output (first run)
+        if: ${{ steps.filter.outputs.filtered_files != '' }}
         env:
           GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
         run: |
-          GROUP="${{ matrix.group }}"
-          FILES="${{ github.event.inputs.test_files }}"
+          FILES="${{ steps.filter.outputs.filtered_files }}"
           TAGS="${{ github.event.inputs.tags }}"
           CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output output.xml"
           if [ ! -z "$TAGS" ]; then
             CMD="$CMD --include $TAGS"
           fi
-          if [ ! -z "$FILES" ]; then
-            CMD="$CMD $FILES"
-          else
-            CMD="$CMD tests/gorest/$GROUP"
-          fi
+          CMD="$CMD $FILES"
           echo "Running: $CMD"
           eval $CMD
           if [ $? -ne 0 ]; then
@@ -140,7 +159,7 @@ jobs:
           fi  
 
       - name: Upload Robot and Allure Results (per group)
-        if: always()
+        if: steps.rerun.outputs.skip-group != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: robot-allure-results-${{ matrix.group }}
@@ -192,29 +211,51 @@ jobs:
           path: ${{ env.ROBOT_RESULTS_DIR }}
         continue-on-error: true
 
+      - name: Filter test files for this group (rerun)
+        id: filter
+        run: |
+          FILES="${{ github.event.inputs.test_files }}"
+          GROUP="${{ matrix.group }}"
+          # Filter files that contain the group name (case-sensitive)
+          FILTERED=""
+          for file in $FILES; do
+            if [[ "$file" == *"/$GROUP/"* ]]; then
+              FILTERED="$FILTERED $file"
+            fi
+          done
+          FILTERED=$(echo $FILTERED | xargs)  # Trim whitespace
+          echo "filtered_files=$FILTERED" >> $GITHUB_OUTPUT
+
+      - name: Skip group if no matching files (rerun)
+        if: ${{ steps.filter.outputs.filtered_files == '' }}
+        run: |
+          echo "No matching test files for group ${{ matrix.group }} in rerun, skipping."
+          echo "skip-group=true" >> $GITHUB_OUTPUT
+          exit 0
+
       - name: Rerun failed tests if output.xml exists
+        if: ${{ steps.filter.outputs.filtered_files != '' }}
         id: rerun
         env:
           GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
         run: |
           if [ -f "${ROBOT_RESULTS_DIR}/output.xml" ]; then
             echo "Found previous output.xml for group ${{ matrix.group }}. Rerunning failed tests..."
-            robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml tests/gorest/${{ matrix.group }}
+            FILES="${{ steps.filter.outputs.filtered_files }}"
+            TAGS="${{ github.event.inputs.tags }}"
+            CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml"
+            if [ ! -z "$TAGS" ]; then
+              CMD="$CMD --include $TAGS"
+            fi
+            CMD="$CMD $FILES"
+            echo "Running: $CMD"
+            eval $CMD
             # Merge results
             python -m robot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
           else
             echo "No previous output.xml found for group ${{ matrix.group }}. Skipping rerun."
             echo "skip-group=true" >> $GITHUB_OUTPUT
           fi
-
-      - name: Upload Robot and Allure Results (per group)
-        if: steps.rerun.outputs.skip-group != 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: robot-allure-results-${{ matrix.group }}
-          path: |
-            ${{ env.ROBOT_RESULTS_DIR }}/
-            ${{ env.ALLURE_RESULTS_DIR }}/
 
   publish-allure-report:
     needs: [test, rerun-failed]
@@ -241,9 +282,6 @@ jobs:
           done
           echo "Contents of merged-allure-results:"
           ls -l merged-allure-results
-
-      - name: Merge Allure results
-        run: ls -l merged-allure-results || echo "No merged Allure results found"
 
       - name: Install Allure CLI
         run: |
