@@ -276,6 +276,9 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
+      - name: Clean merged-allure-results directory
+        run: rm -rf merged-allure-results && mkdir -p merged-allure-results
+
       - name: Checkout code
         uses: actions/checkout@v4
 
