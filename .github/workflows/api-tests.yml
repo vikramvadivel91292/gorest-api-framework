@@ -89,13 +89,18 @@ jobs:
         run: |
           FILES="${{ github.event.inputs.test_files }}"
           GROUP="${{ matrix.group }}"
-          FILTERED=""
-          for file in $FILES; do
-            if [[ "$file" == *"/$GROUP/"* ]]; then
-              FILTERED="$FILTERED $file"
-            fi
-          done
-          FILTERED=$(echo $FILTERED | xargs)
+          if [ -z "$FILES" ]; then
+            # If no test_files specified, run all tests for this group
+            FILTERED="tests/gorest/$GROUP"
+          else
+            FILTERED=""
+            for file in $FILES; do
+              if [[ "$file" == *"/$GROUP/"* ]]; then
+                FILTERED="$FILTERED $file"
+              fi
+            done
+            FILTERED=$(echo $FILTERED | xargs)
+          fi
           echo "filtered_files=$FILTERED" >> $GITHUB_OUTPUT
 
       # Skip group if no matching files (only for workflow_dispatch)
@@ -229,13 +234,18 @@ jobs:
         run: |
           FILES="${{ github.event.inputs.test_files }}"
           GROUP="${{ matrix.group }}"
-          FILTERED=""
-          for file in $FILES; do
-            if [[ "$file" == *"/$GROUP/"* ]]; then
-              FILTERED="$FILTERED $file"
-            fi
-          done
-          FILTERED=$(echo $FILTERED | xargs)
+          if [ -z "$FILES" ]; then
+            # If no test_files specified, run all tests for this group
+            FILTERED="tests/gorest/$GROUP"
+          else
+            FILTERED=""
+            for file in $FILES; do
+              if [[ "$file" == *"/$GROUP/"* ]]; then
+                FILTERED="$FILTERED $file"
+              fi
+            done
+            FILTERED=$(echo $FILTERED | xargs)
+          fi
           echo "filtered_files=$FILTERED" >> $GITHUB_OUTPUT
 
       # Skip group if no matching files (only for workflow_dispatch)
