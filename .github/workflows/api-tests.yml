@@ -131,10 +131,6 @@ jobs:
           CMD="$CMD $FILES"
           echo "Running: $CMD"
           eval $CMD
-          if [ $? -ne 0 ]; then
-            echo "Robot tests failed."
-            exit 1
-          fi
 
       - name: Rerun failed tests (if any and if rerun is enabled)
         if: always()
