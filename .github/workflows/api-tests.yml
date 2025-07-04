@@ -46,7 +46,7 @@ jobs:
     strategy:
       matrix:
         group: [Create, Delete, Get, Update]
-      max-parallel: 2
+      max-parallel: 3
     env:
       ALLURE_RESULTS_DIR: allure-results-${{ matrix.group }}
       ROBOT_RESULTS_DIR: results-${{ matrix.group }}
