@@ -82,35 +82,42 @@ jobs:
         run: |
           rm -rf ${{ env.ALLURE_RESULTS_DIR }} ${{ env.ROBOT_RESULTS_DIR }}
       
+      # Filter test files for this group (only for workflow_dispatch)
       - name: Filter test files for this group
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         id: filter
         run: |
           FILES="${{ github.event.inputs.test_files }}"
           GROUP="${{ matrix.group }}"
-          # Filter files that contain the group name (case-sensitive)
           FILTERED=""
           for file in $FILES; do
             if [[ "$file" == *"/$GROUP/"* ]]; then
               FILTERED="$FILTERED $file"
             fi
           done
-          FILTERED=$(echo $FILTERED | xargs)  # Trim whitespace
+          FILTERED=$(echo $FILTERED | xargs)
           echo "filtered_files=$FILTERED" >> $GITHUB_OUTPUT
 
+      # Skip group if no matching files (only for workflow_dispatch)
       - name: Skip group if no matching files
-        if: ${{ steps.filter.outputs.filtered_files == '' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && steps.filter.outputs.filtered_files == '' }}
         run: |
           echo "No matching test files for group ${{ matrix.group }}, skipping."
           mkdir -p ${{ env.ROBOT_RESULTS_DIR }}
           echo "<robot/>" > ${{ env.ROBOT_RESULTS_DIR }}/output.xml
           exit 0
 
+      # Run Robot tests with Allure output (first run)
       - name: Run Robot tests with Allure output (first run)
-        if: ${{ steps.filter.outputs.filtered_files != '' }}
+        if: ${{ (github.event_name == 'workflow_dispatch' && steps.filter.outputs.filtered_files != '') || github.event_name != 'workflow_dispatch' }}
         env:
           GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
         run: |
-          FILES="${{ steps.filter.outputs.filtered_files }}"
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            FILES="${{ steps.filter.outputs.filtered_files }}"
+          else
+            FILES="tests/gorest/${{ matrix.group }}"
+          fi
           TAGS="${{ github.event.inputs.tags }}"
           CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output output.xml"
           if [ ! -z "$TAGS" ]; then
@@ -211,37 +218,44 @@ jobs:
           path: ${{ env.ROBOT_RESULTS_DIR }}
         continue-on-error: true
 
+      # Filter test files for this group (only for workflow_dispatch)
       - name: Filter test files for this group (rerun)
+        if: ${{ github.event_name == 'workflow_dispatch' }}
         id: filter
         run: |
           FILES="${{ github.event.inputs.test_files }}"
           GROUP="${{ matrix.group }}"
-          # Filter files that contain the group name (case-sensitive)
           FILTERED=""
           for file in $FILES; do
             if [[ "$file" == *"/$GROUP/"* ]]; then
               FILTERED="$FILTERED $file"
             fi
           done
-          FILTERED=$(echo $FILTERED | xargs)  # Trim whitespace
+          FILTERED=$(echo $FILTERED | xargs)
           echo "filtered_files=$FILTERED" >> $GITHUB_OUTPUT
 
+      # Skip group if no matching files (only for workflow_dispatch)
       - name: Skip group if no matching files (rerun)
-        if: ${{ steps.filter.outputs.filtered_files == '' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && steps.filter.outputs.filtered_files == '' }}
         run: |
           echo "No matching test files for group ${{ matrix.group }} in rerun, skipping."
           echo "skip-group=true" >> $GITHUB_OUTPUT
           exit 0
 
+      # Rerun failed tests if output.xml exists
       - name: Rerun failed tests if output.xml exists
-        if: ${{ steps.filter.outputs.filtered_files != '' }}
+        if: ${{ (github.event_name == 'workflow_dispatch' && steps.filter.outputs.filtered_files != '') || github.event_name != 'workflow_dispatch' }}
         id: rerun
         env:
           GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
         run: |
           if [ -f "${ROBOT_RESULTS_DIR}/output.xml" ]; then
             echo "Found previous output.xml for group ${{ matrix.group }}. Rerunning failed tests..."
-            FILES="${{ steps.filter.outputs.filtered_files }}"
+            if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+              FILES="${{ steps.filter.outputs.filtered_files }}"
+            else
+              FILES="tests/gorest/${{ matrix.group }}"
+            fi
             TAGS="${{ github.event.inputs.tags }}"
             CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml"
             if [ ! -z "$TAGS" ]; then
