@@ -145,13 +145,13 @@ jobs:
       - name: Merge Robot Framework results
         run: |
           if [ -f ${ROBOT_RESULTS_DIR}/rerun.xml ]; then
-            python -m robot.rebot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
+            python -m robot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
           fi
 
       - name: Add rerun metadata to report
         run: |
           if [ -f ${ROBOT_RESULTS_DIR}/output.xml ]; then
-            python -m robot.rebot --output ${ROBOT_RESULTS_DIR}/output.xml \
+            python -m robot --output ${ROBOT_RESULTS_DIR}/output.xml \
                   --setmetadata "Rerun" "true" \
                   ${ROBOT_RESULTS_DIR}/output.xml
           fi
@@ -160,7 +160,7 @@ jobs:
         run: |
           if [ -f ${ROBOT_RESULTS_DIR}/output.xml ]; then
             TS=$(date +'%Y-%m-%d %H:%M:%S')
-            python -m robot.rebot --output ${ROBOT_RESULTS_DIR}/output.xml \
+            python -m robot --output ${ROBOT_RESULTS_DIR}/output.xml \
                   --setmetadata "Rerun Timestamp" "$TS" \
                   ${ROBOT_RESULTS_DIR}/output.xml
           fi    
@@ -227,7 +227,7 @@ jobs:
             echo "Found previous output.xml for group ${{ matrix.group }}. Rerunning failed tests..."
             robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml tests/gorest/${{ matrix.group }}
             # Merge results
-            python -m robot.rebot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
+            python -m robot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
           else
             echo "No previous output.xml found for group ${{ matrix.group }}. Skipping rerun."
             echo "skip-group=true" >> $GITHUB_OUTPUT
