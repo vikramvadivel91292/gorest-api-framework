@@ -78,15 +78,6 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Debug Robot Framework version and path
-        run: |
-          which python
-          python --version
-          pip show robotframework
-          python -m robot --version
-          python -m robot.rebot --version
-          python -m robot.rebot --help
-
       - name: Clean results directories
         run: |
           rm -rf ${{ env.ALLURE_RESULTS_DIR }} ${{ env.ROBOT_RESULTS_DIR }}
