@@ -193,6 +193,10 @@ jobs:
       ROBOT_RESULTS_DIR: results-${{ matrix.group }}
 
     steps:
+      - name: Clean results directories
+        run: |
+          rm -rf ${{ env.ALLURE_RESULTS_DIR }} ${{ env.ROBOT_RESULTS_DIR }}
+
       - name: Checkout code
         uses: actions/checkout@v4
 
