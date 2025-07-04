@@ -166,7 +166,7 @@ jobs:
           fi  
 
       - name: Upload Robot and Allure Results (per group)
-        if: ${{ github.event_name != 'workflow_dispatch' || steps.rerun.outputs.skip-group != 'true' }}
+        if: always() && ${{ github.event_name != 'workflow_dispatch' || steps.rerun.outputs.skip-group != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: robot-allure-results-${{ matrix.group }}
