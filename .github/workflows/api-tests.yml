@@ -119,7 +119,7 @@ jobs:
               CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml"
               CMD="$CMD tests/gorest/$GROUP"
               if [ ! -z "$TAGS" ]; then
-                CMD="$CMD --include \"$TAGS\""
+                CMD="$CMD --include $TAGS"
               fi
               if [ ! -z "$FILES" ]; then
                 CMD="$CMD $FILES"
@@ -138,6 +138,23 @@ jobs:
           if [ -f ${ROBOT_RESULTS_DIR}/rerun.xml ]; then
             rebot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
           fi
+
+      - name: Add rerun metadata to report
+        run: |
+          if [ -f ${ROBOT_RESULTS_DIR}/output.xml ]; then
+            rebot --output ${ROBOT_RESULTS_DIR}/output.xml \
+                  --setmetadata "Rerun" "true" \
+                  ${ROBOT_RESULTS_DIR}/output.xml
+          fi
+
+      - name: Add timestamp metadata to report
+        run: |
+          if [ -f ${ROBOT_RESULTS_DIR}/output.xml ]; then
+            TS=$(date +'%Y-%m-%d %H:%M:%S')
+            rebot --output ${ROBOT_RESULTS_DIR}/output.xml \
+                  --setmetadata "Rerun Timestamp" "$TS" \
+                  ${ROBOT_RESULTS_DIR}/output.xml
+          fi    
 
       - name: Upload Robot and Allure Results (per group)
         if: always()
