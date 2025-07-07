@@ -1,0 +1,9 @@
+{
+  "Phone": "555-1234",
+  "Website": "https://acme.example.com",
+  "BillingStreet": "123 Main St",
+  "BillingCity": "Metropolis",
+  "Industry": "Manufacturing",
+  "BillingPostalCode": "90001",
+  "Description": "Test account created via Robot Framework automation"
+}

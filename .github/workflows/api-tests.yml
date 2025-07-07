@@ -42,7 +42,7 @@ jobs:
     if: ${{ github.event.inputs.rerun_failed != 'true' }}
     runs-on: ubuntu-latest
     continue-on-error: true
-    timeout-minutes: 60
+    timeout-minutes: 5
     strategy:
       matrix:
         group: [Create, Delete, Get, Update]
@@ -91,7 +91,7 @@ jobs:
           GROUP="${{ matrix.group }}"
           if [ -z "$FILES" ]; then
             # If no test_files specified, run all tests for this group
-            FILTERED="tests/gorest/$GROUP"
+            FILTERED="tests/Sandbox_Account/$GROUP"
           else
             FILTERED=""
             for file in $FILES; do
@@ -121,7 +121,7 @@ jobs:
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             FILES="${{ steps.filter.outputs.filtered_files }}"
           else
-            FILES="tests/gorest/${{ matrix.group }}"
+            FILES="tests/Sandbox_Account/${{ matrix.group }}"
           fi
           TAGS="${{ github.event.inputs.tags }}"
           CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output output.xml"
@@ -144,7 +144,7 @@ jobs:
               FILES="${{ github.event.inputs.test_files }}"
               TAGS="${{ github.event.inputs.tags }}"
               CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml"
-              CMD="$CMD tests/gorest/$GROUP"
+              CMD="$CMD tests/Sandbox_Account/$GROUP"
               if [ ! -z "$TAGS" ]; then
                 CMD="$CMD --include $TAGS"
               fi
@@ -232,7 +232,7 @@ jobs:
           GROUP="${{ matrix.group }}"
           if [ -z "$FILES" ]; then
             # If no test_files specified, run all tests for this group
-            FILTERED="tests/gorest/$GROUP"
+            FILTERED="tests/Sandbox_Account/$GROUP"
           else
             FILTERED=""
             for file in $FILES; do
@@ -264,7 +264,7 @@ jobs:
             if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
               FILES="${{ steps.filter.outputs.filtered_files }}"
             else
-              FILES="tests/gorest/${{ matrix.group }}"
+              FILES="tests/Sandbox_Account/${{ matrix.group }}"
             fi
             TAGS="${{ github.event.inputs.tags }}"
             CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml"
