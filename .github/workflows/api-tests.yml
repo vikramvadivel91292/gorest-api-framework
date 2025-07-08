@@ -162,7 +162,7 @@ jobs:
       - name: Merge Robot Framework results
         run: |
           if [ -f ${ROBOT_RESULTS_DIR}/rerun.xml ]; then
-            python -m robot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
+            python -m robot.rebot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
           fi  
 
       - name: Upload Robot and Allure Results (per group)
@@ -222,7 +222,6 @@ jobs:
           path: ${{ env.ROBOT_RESULTS_DIR }}
         continue-on-error: true
 
-        
       # Filter test files for this group (only for workflow_dispatch)
       - name: Filter test files for this group (rerun)
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -252,33 +251,38 @@ jobs:
           echo "skip-group=true" >> $GITHUB_OUTPUT
           exit 0
 
-      # Rerun failed tests if output.xml exists
-      - name: Rerun failed tests if output.xml exists
+      # Rerun failed tests if output.xml exists and has failures
+      - name: Rerun failed tests if output.xml exists and has failures
         if: ${{ (github.event_name == 'workflow_dispatch' && steps.filter.outputs.filtered_files != '') || github.event_name != 'workflow_dispatch' }}
         id: rerun
         env:
           GOREST_TOKEN: ${{ secrets.GOREST_TOKEN }}
         run: |
           if [ -f "${ROBOT_RESULTS_DIR}/output.xml" ]; then
-            echo "Found previous output.xml for group ${{ matrix.group }}. Rerunning failed tests..."
-            if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-              FILES="${{ steps.filter.outputs.filtered_files }}"
+            if grep -q '<status status="FAIL"' ${ROBOT_RESULTS_DIR}/output.xml; then
+              echo "Found previous output.xml for group ${{ matrix.group }} with failures. Rerunning failed tests..."
+              if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+                FILES="${{ steps.filter.outputs.filtered_files }}"
+              else
+                FILES="tests/Sandbox_Account/${{ matrix.group }}"
+              fi
+              TAGS="${{ github.event.inputs.tags }}"
+              CMD="robot --runemptysuite --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml"
+              if [ ! -z "$TAGS" ]; then
+                CMD="$CMD --include $TAGS"
+              fi
+              CMD="$CMD $FILES"
+              echo "Running: $CMD"
+              eval $CMD
+              # Merge results
+              python -m robot.rebot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
             else
-              FILES="tests/Sandbox_Account/${{ matrix.group }}"
+              echo "No failed tests to rerun for group ${{ matrix.group }}."
+              exit 0
             fi
-            TAGS="${{ github.event.inputs.tags }}"
-            CMD="robot --runemptysuite --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml"
-            if [ ! -z "$TAGS" ]; then
-              CMD="$CMD --include $TAGS"
-            fi
-            CMD="$CMD $FILES"
-            echo "Running: $CMD"
-            eval $CMD
-            # Merge results
-            python -m robot --output ${ROBOT_RESULTS_DIR}/output.xml --merge ${ROBOT_RESULTS_DIR}/output.xml ${ROBOT_RESULTS_DIR}/rerun.xml
           else
             echo "No previous output.xml found for group ${{ matrix.group }}. Skipping rerun."
-            echo "skip-group=true" >> $GITHUB_OUTPUT
+            exit 0
           fi
 
   publish-allure-report:
@@ -297,7 +301,6 @@ jobs:
         with:
           pattern: robot-allure-results-*
           path: all-artifacts
-
 
       - name: Merge Allure results
         run: |
