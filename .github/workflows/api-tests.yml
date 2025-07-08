@@ -39,7 +39,6 @@ on:
 
 jobs:
   test:
-    if: ${{ github.event.inputs.rerun_failed != 'true' }}
     runs-on: ubuntu-latest
     continue-on-error: true
     timeout-minutes: 5
@@ -223,6 +222,7 @@ jobs:
           path: ${{ env.ROBOT_RESULTS_DIR }}
         continue-on-error: true
 
+        
       # Filter test files for this group (only for workflow_dispatch)
       - name: Filter test files for this group (rerun)
         if: ${{ github.event_name == 'workflow_dispatch' }}
