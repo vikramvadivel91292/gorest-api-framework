@@ -7,7 +7,7 @@ Suite Setup    Load Access Token And Account Data
 
 *** Test Cases ***
 Create Account With Invalid JSON
-    [Tags]    smoke    regression
+    [Tags]    regression
     ${headers}=    Create Dictionary    Authorization=Bearer ${ACCESS_TOKEN}    Content-Type=application/json
     ${resp}=    POST    ${INSTANCE_URL}/services/data/${API_VERSION}/sobjects/Account/    headers=${headers}    json=${MALFORMED_JSON}
     Should Be Equal As Integers    ${resp.status_code}    400

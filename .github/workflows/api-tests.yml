@@ -32,7 +32,7 @@ on:
       rerun_failed:
         description: 'Rerun failed tests only from previous run? (true/false)'
         required: false
-        default: ''
+        default: 'true'
 
   schedule:
     - cron: '0 8 * * *' # Every day at 8 AM UTC
@@ -124,7 +124,7 @@ jobs:
             FILES="tests/Sandbox_Account/${{ matrix.group }}"
           fi
           TAGS="${{ github.event.inputs.tags }}"
-          CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output output.xml"
+          CMD="robot --runemptysuite --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output output.xml"
           if [ ! -z "$TAGS" ]; then
             CMD="$CMD --include $TAGS"
           fi
@@ -143,7 +143,7 @@ jobs:
               GROUP="${{ matrix.group }}"
               FILES="${{ github.event.inputs.test_files }}"
               TAGS="${{ github.event.inputs.tags }}"
-              CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml"
+              CMD="robot --runemptysuite --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml"
               CMD="$CMD tests/Sandbox_Account/$GROUP"
               if [ ! -z "$TAGS" ]; then
                 CMD="$CMD --include $TAGS"
@@ -267,7 +267,7 @@ jobs:
               FILES="tests/Sandbox_Account/${{ matrix.group }}"
             fi
             TAGS="${{ github.event.inputs.tags }}"
-            CMD="robot --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml"
+            CMD="robot --runemptysuite --listener allure_robotframework:${ALLURE_RESULTS_DIR} -d ${ROBOT_RESULTS_DIR} --output rerun.xml --rerunfailed ${ROBOT_RESULTS_DIR}/output.xml"
             if [ ! -z "$TAGS" ]; then
               CMD="$CMD --include $TAGS"
             fi

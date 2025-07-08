@@ -8,6 +8,7 @@ Suite Setup    Load Access Token And Account Data
 
 *** Test Cases ***
 Update Account With Multiple Fields
+    [Tags]    smoke    regression
     ${account_id}=    Create Account With Valid Data
     ${headers}=    Create Dictionary    Authorization=Bearer ${ACCESS_TOKEN}    Content-Type=application/json
     ${json_string}=    Get File    data/update.json
