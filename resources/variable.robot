@@ -8,3 +8,4 @@ ${INVALID_DATA}    ${CURDIR}/../data/invalid_account_data.json
 ${account_id}    001gL00000DDXbkQAH
 ${UPDATE_JSON_PATH}    ${CURDIR}/../data/update.json
 ${invalid_account_id}    invalidid123
+${MALFORMED_JSON}    ${CURDIR}/../data/malformed_data.json

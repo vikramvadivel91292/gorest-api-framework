@@ -1,312 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.3.1 (Python 3.13.5 on darwin)" generated="2025-07-08T02:16:38.714312" rpa="false" schemaversion="5">
-<suite id="s1" name="Create" source="/Users/vivadivel/Desktop/gorest-api-framework/tests/Sandbox_Account/Create">
-<suite id="s1-s1" name="Create Account" source="/Users/vivadivel/Desktop/gorest-api-framework/tests/Sandbox_Account/Create/Create_Account.robot">
+<robot generator="Robot 7.3.1 (Python 3.13.5 on darwin)" generated="2025-07-08T12:59:31.011789" rpa="false" schemaversion="5">
+<suite id="s1" name="Create Account Invalid Json" source="/Users/vivadivel/Desktop/gorest-api-framework/tests/Sandbox_Account/Create/Create_Account_Invalid_Json.robot">
 <kw name="Load Access Token And Account Data" owner="keyword" type="SETUP">
 <kw name="Load Access Token" owner="keyword">
 <kw name="Get File" owner="OperatingSystem">
-<msg time="2025-07-08T02:16:38.818204" level="INFO" html="true">Getting file '&lt;a href="file:///Users/vivadivel/Desktop/gorest-api-framework/data/token.txt"&gt;/Users/vivadivel/Desktop/gorest-api-framework/data/token.txt&lt;/a&gt;'.</msg>
-<msg time="2025-07-08T02:16:38.818423" level="INFO">${token} = 00DgL000006I3IZ!AQEAQJMmF5Myu1JtOKMi_alEqL4c1NXUHVlb89yvCnPHXvhC26ufjHXGJeYVbQBT05V8HRTF_.s3O367T9vM39nW_47WBBaU</msg>
+<msg time="2025-07-08T12:59:31.135842" level="INFO" html="true">Getting file '&lt;a href="file:///Users/vivadivel/Desktop/gorest-api-framework/data/token.txt"&gt;/Users/vivadivel/Desktop/gorest-api-framework/data/token.txt&lt;/a&gt;'.</msg>
+<msg time="2025-07-08T12:59:31.136137" level="INFO">${token} = 00DgL000006I3IZ!AQEAQG9AXJk7J92SbLHIGrvwIWRyp_hQrSWJgagyHRXswdxKcUIqlZG.Un2S9nVsfl6H2fA8mIeoaKgQvCzIbejRQJmCo26k</msg>
 <var>${token}</var>
 <arg>${TOKEN_FILE}</arg>
 <doc>Returns the contents of a specified file.</doc>
-<status status="PASS" start="2025-07-08T02:16:38.818130" elapsed="0.000304"/>
+<status status="PASS" start="2025-07-08T12:59:31.135762" elapsed="0.000388"/>
 </kw>
 <kw name="Set Suite Variable" owner="BuiltIn">
-<msg time="2025-07-08T02:16:38.818749" level="INFO">${ACCESS_TOKEN} = 00DgL000006I3IZ!AQEAQJMmF5Myu1JtOKMi_alEqL4c1NXUHVlb89yvCnPHXvhC26ufjHXGJeYVbQBT05V8HRTF_.s3O367T9vM39nW_47WBBaU</msg>
+<msg time="2025-07-08T12:59:31.136497" level="INFO">${ACCESS_TOKEN} = 00DgL000006I3IZ!AQEAQG9AXJk7J92SbLHIGrvwIWRyp_hQrSWJgagyHRXswdxKcUIqlZG.Un2S9nVsfl6H2fA8mIeoaKgQvCzIbejRQJmCo26k</msg>
 <arg>${ACCESS_TOKEN}</arg>
 <arg>${token}</arg>
 <doc>Makes a variable available everywhere within the scope of the current suite.</doc>
-<status status="PASS" start="2025-07-08T02:16:38.818488" elapsed="0.000278"/>
+<status status="PASS" start="2025-07-08T12:59:31.136206" elapsed="0.000310"/>
 </kw>
 <doc>Loads the access token from file</doc>
-<status status="PASS" start="2025-07-08T02:16:38.817911" elapsed="0.000880"/>
+<status status="PASS" start="2025-07-08T12:59:31.135537" elapsed="0.001006"/>
 </kw>
 <kw name="Load Account Data" owner="keyword">
 <kw name="Get File" owner="OperatingSystem">
-<msg time="2025-07-08T02:16:38.818938" level="INFO" html="true">Getting file '&lt;a href="file:///Users/vivadivel/Desktop/gorest-api-framework/data/account_data.json"&gt;/Users/vivadivel/Desktop/gorest-api-framework/data/account_data.json&lt;/a&gt;'.</msg>
-<msg time="2025-07-08T02:16:38.819091" level="INFO">${json} = {
+<msg time="2025-07-08T12:59:31.136693" level="INFO" html="true">Getting file '&lt;a href="file:///Users/vivadivel/Desktop/gorest-api-framework/data/account_data.json"&gt;/Users/vivadivel/Desktop/gorest-api-framework/data/account_data.json&lt;/a&gt;'.</msg>
+<msg time="2025-07-08T12:59:31.137031" level="INFO">${json} = {
   "Name": "Pears Corporation"
 }
 </msg>
 <var>${json}</var>
 <arg>${ACCOUNT_DATA_FILE}</arg>
 <doc>Returns the contents of a specified file.</doc>
-<status status="PASS" start="2025-07-08T02:16:38.818894" elapsed="0.000205"/>
+<status status="PASS" start="2025-07-08T12:59:31.136645" elapsed="0.000395"/>
 </kw>
 <kw name="Evaluate" owner="BuiltIn">
-<msg time="2025-07-08T02:16:38.819219" level="INFO">${account_data} = {'Name': 'Pears Corporation'}</msg>
+<msg time="2025-07-08T12:59:31.137185" level="INFO">${account_data} = {'Name': 'Pears Corporation'}</msg>
 <var>${account_data}</var>
 <arg>json.loads('''${json}''')</arg>
 <arg>json</arg>
 <doc>Evaluates the given expression in Python and returns the result.</doc>
-<status status="PASS" start="2025-07-08T02:16:38.819132" elapsed="0.000094"/>
+<status status="PASS" start="2025-07-08T12:59:31.137079" elapsed="0.000113"/>
 </kw>
 <kw name="Set Suite Variable" owner="BuiltIn">
-<msg time="2025-07-08T02:16:38.819318" level="INFO">${ACCOUNT_DATA} = {'Name': 'Pears Corporation'}</msg>
+<msg time="2025-07-08T12:59:31.137293" level="INFO">${ACCOUNT_DATA} = {'Name': 'Pears Corporation'}</msg>
 <arg>${ACCOUNT_DATA}</arg>
 <arg>${account_data}</arg>
 <doc>Makes a variable available everywhere within the scope of the current suite.</doc>
-<status status="PASS" start="2025-07-08T02:16:38.819260" elapsed="0.000069"/>
+<status status="PASS" start="2025-07-08T12:59:31.137230" elapsed="0.000077"/>
 </kw>
 <doc>Loads the account data from JSON file</doc>
-<status status="PASS" start="2025-07-08T02:16:38.818844" elapsed="0.000502"/>
+<status status="PASS" start="2025-07-08T12:59:31.136591" elapsed="0.000737"/>
 </kw>
 <doc>Loads both access token and account data</doc>
-<status status="PASS" start="2025-07-08T02:16:38.817802" elapsed="0.001557"/>
+<status status="PASS" start="2025-07-08T12:59:31.135423" elapsed="0.001920"/>
 </kw>
-<test id="s1-s1-t1" name="Create New Account" line="10">
-<kw name="Create Account With Valid Data" owner="keyword">
+<test id="s1-t1" name="Create Account With Invalid JSON" line="10">
 <kw name="Create Dictionary" owner="BuiltIn">
-<msg time="2025-07-08T02:16:38.819711" level="INFO">${headers} = {'Authorization': 'Bearer 00DgL000006I3IZ!AQEAQJMmF5Myu1JtOKMi_alEqL4c1NXUHVlb89yvCnPHXvhC26ufjHXGJeYVbQBT05V8HRTF_.s3O367T9vM39nW_47WBBaU', 'Content-Type': 'application/json'}</msg>
+<msg time="2025-07-08T12:59:31.137622" level="INFO">${headers} = {'Authorization': 'Bearer 00DgL000006I3IZ!AQEAQG9AXJk7J92SbLHIGrvwIWRyp_hQrSWJgagyHRXswdxKcUIqlZG.Un2S9nVsfl6H2fA8mIeoaKgQvCzIbejRQJmCo26k', 'Content-Type': 'application/json'}</msg>
 <var>${headers}</var>
 <arg>Authorization=Bearer ${ACCESS_TOKEN}</arg>
 <arg>Content-Type=application/json</arg>
 <doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<status status="PASS" start="2025-07-08T02:16:38.819602" elapsed="0.000119"/>
-</kw>
-<kw name="Generate Random String" owner="keyword">
-<kw name="Set Variable" owner="BuiltIn">
-<msg time="2025-07-08T02:16:38.819885" level="INFO">${CHARS} = abcdefghijklmnopqrstuvwxyz0123456789</msg>
-<var>${CHARS}</var>
-<arg>abcdefghijklmnopqrstuvwxyz0123456789</arg>
-<doc>Returns the given values which can then be assigned to a variables.</doc>
-<status status="PASS" start="2025-07-08T02:16:38.819846" elapsed="0.000047"/>
-</kw>
-<kw name="Evaluate" owner="BuiltIn">
-<msg time="2025-07-08T02:16:38.820041" level="INFO">${result} = bqvao</msg>
-<var>${result}</var>
-<arg>''.join(random.choices('${CHARS}', k=${length}))</arg>
-<arg>random</arg>
-<doc>Evaluates the given expression in Python and returns the result.</doc>
-<status status="PASS" start="2025-07-08T02:16:38.819926" elapsed="0.000122"/>
-</kw>
-<return>
-<value>${result}</value>
-<status status="PASS" start="2025-07-08T02:16:38.820065" elapsed="0.000017"/>
-</return>
-<msg time="2025-07-08T02:16:38.820118" level="INFO">${random} = bqvao</msg>
-<var>${random}</var>
-<arg>5</arg>
-<status status="PASS" start="2025-07-08T02:16:38.819772" elapsed="0.000352"/>
-</kw>
-<kw name="Create Dictionary" owner="BuiltIn">
-<msg time="2025-07-08T02:16:38.820218" level="INFO">${data} = {'name': 'bqvao Corporation'}</msg>
-<var>${data}</var>
-<arg>name=${random} Corporation</arg>
-<doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<status status="PASS" start="2025-07-08T02:16:38.820156" elapsed="0.000069"/>
+<status status="PASS" start="2025-07-08T12:59:31.137505" elapsed="0.000127"/>
 </kw>
 <kw name="POST" owner="RequestsLibrary">
-<msg time="2025-07-08T02:16:39.429448" level="INFO">POST Request : url=https://orgfarm-2acc2d9727-dev-ed.develop.my.salesforce.com/services/data/v62.0/sobjects/Account/ 
+<msg time="2025-07-08T12:59:31.970233" level="INFO">POST Request : url=https://orgfarm-2acc2d9727-dev-ed.develop.my.salesforce.com/services/data/v62.0/sobjects/Account/ 
  path_url=/services/data/v62.0/sobjects/Account/ 
- headers={'User-Agent': 'python-requests/2.32.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer 00DgL000006I3IZ!AQEAQJMmF5Myu1JtOKMi_alEqL4c1NXUHVlb89yvCnPHXvhC26ufjHXGJeYVbQBT05V8HRTF_.s3O367T9vM39nW_47WBBaU', 'Content-Type': 'application/json', 'Content-Length': '29'} 
- body=b'{"name": "bqvao Corporation"}' 
+ headers={'User-Agent': 'python-requests/2.32.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer 00DgL000006I3IZ!AQEAQG9AXJk7J92SbLHIGrvwIWRyp_hQrSWJgagyHRXswdxKcUIqlZG.Un2S9nVsfl6H2fA8mIeoaKgQvCzIbejRQJmCo26k', 'Content-Type': 'application/json', 'Content-Length': '85'} 
+ body=b'"/Users/vivadivel/Desktop/gorest-api-framework/resources/../data/malformed_data.json"' 
  </msg>
-<msg time="2025-07-08T02:16:39.429749" level="INFO">POST Response : url=https://orgfarm-2acc2d9727-dev-ed.develop.my.salesforce.com/services/data/v62.0/sobjects/Account/ 
- status=201, reason=Created 
- headers={'Date': 'Mon, 07 Jul 2025 20:46:39 GMT', 'Content-Type': 'application/json;charset=UTF-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'X-Content-Type-Options': 'nosniff', 'Content-Encoding': 'gzip', 'Strict-Transport-Security': 'max-age=63072000; includeSubDomains', 'Location': '/services/data/v62.0/sobjects/Account/001gL00000DDk0nQAD', 'Vary': 'Accept-Encoding', 'Set-Cookie': 'CookieConsentPolicy=0:1; path=/; expires=Tue, 07-Jul-2026 20:46:39 GMT; Max-Age=31536000; secure, LSKey-c$CookieConsentPolicy=0:1; path=/; expires=Tue, 07-Jul-2026 20:46:39 GMT; Max-Age=31536000; secure, BrowserId=evJGV1tzEfClIgVdbAJ7PA; domain=.salesforce.com; path=/; expires=Tue, 07-Jul-2026 20:46:39 GMT; Max-Age=31536000; secure; SameSite=None', 'Cache-Control': 'no-cache,must-revalidate,max-age=0,no-store,private', 'X-Robots-Tag': 'none', 'Sforce-Limit-Info': 'api-usage=101/15000', 'Server': 'sfdcedge', 'X-SFDC-Request-Id': '60b085e4de2c7e253a7992d5737186e4', 'X-Request-Id': '60b085e4de2c7e253a7992d5737186e4'} 
- body={"id":"001gL00000DDk0nQAD","success":true,"errors":[]} 
- </msg>
-<msg time="2025-07-08T02:16:39.430070" level="INFO">${resp} = &lt;Response [201]&gt;</msg>
-<var>${resp}</var>
-<arg>${INSTANCE_URL}/services/data/${API_VERSION}/sobjects/Account/</arg>
-<arg>headers=${headers}</arg>
-<arg>json=${data}</arg>
-<doc>Sends a POST request.</doc>
-<status status="PASS" start="2025-07-08T02:16:38.820254" elapsed="0.609875"/>
-</kw>
-<kw name="Should Be Equal As Integers" owner="BuiltIn">
-<msg time="2025-07-08T02:16:39.431786" level="INFO">Argument types are:
-&lt;class 'int'&gt;
-&lt;class 'str'&gt;</msg>
-<arg>${resp.status_code}</arg>
-<arg>201</arg>
-<doc>Fails if objects are unequal after converting them to integers.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.430512" elapsed="0.001409"/>
-</kw>
-<kw name="Set Variable" owner="BuiltIn">
-<msg time="2025-07-08T02:16:39.433489" level="INFO">${account_id} = 001gL00000DDk0nQAD</msg>
-<var>${account_id}</var>
-<arg>${resp.json()['id']}</arg>
-<doc>Returns the given values which can then be assigned to a variables.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.432433" elapsed="0.001106"/>
-</kw>
-<kw name="Set Suite Variable" owner="BuiltIn">
-<msg time="2025-07-08T02:16:39.434113" level="INFO">${account_id} = 001gL00000DDk0nQAD</msg>
-<arg>${account_id}</arg>
-<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.433772" elapsed="0.000411"/>
-</kw>
-<return>
-<value>${account_id}</value>
-<status status="PASS" start="2025-07-08T02:16:39.434284" elapsed="0.000103"/>
-</return>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>${resp}</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="NOT RUN" start="2025-07-08T02:16:39.434589" elapsed="0.000034"/>
-</kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>${resp.text}</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="NOT RUN" start="2025-07-08T02:16:39.434778" elapsed="0.000030"/>
-</kw>
-<msg time="2025-07-08T02:16:39.435043" level="INFO">${user_id} = 001gL00000DDk0nQAD</msg>
-<var>${user_id}</var>
-<status status="PASS" start="2025-07-08T02:16:38.819529" elapsed="0.615557"/>
-</kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>Created Account with ID: ${user_id}</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.435448" elapsed="0.000356"/>
-</kw>
-<tag>regression</tag>
-<tag>smoke</tag>
-<status status="PASS" start="2025-07-08T02:16:38.819379" elapsed="0.616757"/>
-</test>
-<status status="PASS" start="2025-07-08T02:16:38.727644" elapsed="0.709669"/>
-</suite>
-<suite id="s1-s2" name="Create Account With Invalid Fields" source="/Users/vivadivel/Desktop/gorest-api-framework/tests/Sandbox_Account/Create/Create_Account_With_Invalid_Fields.robot">
-<kw name="Setup Session And Load Data" type="SETUP">
-<kw name="Create Session" owner="RequestsLibrary">
-<msg time="2025-07-08T02:16:39.443307" level="INFO">Creating Session using : alias=mysession, url=https://orgfarm-2acc2d9727-dev-ed.develop.my.salesforce.com, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
-<arg>mysession</arg>
-<arg>${INSTANCE_URL}</arg>
-<doc>Create Session: create a HTTP session to a server</doc>
-<status status="PASS" start="2025-07-08T02:16:39.443127" elapsed="0.001247"/>
-</kw>
-<kw name="Load Access Token And Account Data" owner="keyword">
-<kw name="Load Access Token" owner="keyword">
-<kw name="Get File" owner="OperatingSystem">
-<msg time="2025-07-08T02:16:39.444944" level="INFO" html="true">Getting file '&lt;a href="file:///Users/vivadivel/Desktop/gorest-api-framework/data/token.txt"&gt;/Users/vivadivel/Desktop/gorest-api-framework/data/token.txt&lt;/a&gt;'.</msg>
-<msg time="2025-07-08T02:16:39.445666" level="INFO">${token} = 00DgL000006I3IZ!AQEAQJMmF5Myu1JtOKMi_alEqL4c1NXUHVlb89yvCnPHXvhC26ufjHXGJeYVbQBT05V8HRTF_.s3O367T9vM39nW_47WBBaU</msg>
-<var>${token}</var>
-<arg>${TOKEN_FILE}</arg>
-<doc>Returns the contents of a specified file.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.444818" elapsed="0.000881"/>
-</kw>
-<kw name="Set Suite Variable" owner="BuiltIn">
-<msg time="2025-07-08T02:16:39.446571" level="INFO">${ACCESS_TOKEN} = 00DgL000006I3IZ!AQEAQJMmF5Myu1JtOKMi_alEqL4c1NXUHVlb89yvCnPHXvhC26ufjHXGJeYVbQBT05V8HRTF_.s3O367T9vM39nW_47WBBaU</msg>
-<arg>${ACCESS_TOKEN}</arg>
-<arg>${token}</arg>
-<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.445824" elapsed="0.000791"/>
-</kw>
-<doc>Loads the access token from file</doc>
-<status status="PASS" start="2025-07-08T02:16:39.444686" elapsed="0.001987"/>
-</kw>
-<kw name="Load Account Data" owner="keyword">
-<kw name="Get File" owner="OperatingSystem">
-<msg time="2025-07-08T02:16:39.447037" level="INFO" html="true">Getting file '&lt;a href="file:///Users/vivadivel/Desktop/gorest-api-framework/data/account_data.json"&gt;/Users/vivadivel/Desktop/gorest-api-framework/data/account_data.json&lt;/a&gt;'.</msg>
-<msg time="2025-07-08T02:16:39.447454" level="INFO">${json} = {
-  "Name": "Pears Corporation"
-}
-</msg>
-<var>${json}</var>
-<arg>${ACCOUNT_DATA_FILE}</arg>
-<doc>Returns the contents of a specified file.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.446929" elapsed="0.000546"/>
-</kw>
-<kw name="Evaluate" owner="BuiltIn">
-<msg time="2025-07-08T02:16:39.448125" level="INFO">${account_data} = {'Name': 'Pears Corporation'}</msg>
-<var>${account_data}</var>
-<arg>json.loads('''${json}''')</arg>
-<arg>json</arg>
-<doc>Evaluates the given expression in Python and returns the result.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.447570" elapsed="0.000578"/>
-</kw>
-<kw name="Set Suite Variable" owner="BuiltIn">
-<msg time="2025-07-08T02:16:39.448556" level="INFO">${ACCOUNT_DATA} = {'Name': 'Pears Corporation'}</msg>
-<arg>${ACCOUNT_DATA}</arg>
-<arg>${account_data}</arg>
-<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.448310" elapsed="0.000288"/>
-</kw>
-<doc>Loads the account data from JSON file</doc>
-<status status="PASS" start="2025-07-08T02:16:39.446793" elapsed="0.001856"/>
-</kw>
-<doc>Loads both access token and account data</doc>
-<status status="PASS" start="2025-07-08T02:16:39.444523" elapsed="0.004164"/>
-</kw>
-<status status="PASS" start="2025-07-08T02:16:39.442870" elapsed="0.005851"/>
-</kw>
-<test id="s1-s2-t1" name="Create Account With Invalid Fields" line="15">
-<kw name="Create Dictionary" owner="BuiltIn">
-<msg time="2025-07-08T02:16:39.449490" level="INFO">${headers} = {'Authorization': 'Bearer 00DgL000006I3IZ!AQEAQJMmF5Myu1JtOKMi_alEqL4c1NXUHVlb89yvCnPHXvhC26ufjHXGJeYVbQBT05V8HRTF_.s3O367T9vM39nW_47WBBaU', 'Content-Type': 'application/json'}</msg>
-<var>${headers}</var>
-<arg>Authorization=Bearer ${ACCESS_TOKEN}</arg>
-<arg>Content-Type=application/json</arg>
-<doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.449249" elapsed="0.000264"/>
-</kw>
-<kw name="POST On Session" owner="RequestsLibrary">
-<msg time="2025-07-08T02:16:39.808273" level="INFO">POST Request : url=https://orgfarm-2acc2d9727-dev-ed.develop.my.salesforce.com/services/data/v62.0/sobjects/Account/ 
- path_url=/services/data/v62.0/sobjects/Account/ 
- headers={'User-Agent': 'python-requests/2.32.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer 00DgL000006I3IZ!AQEAQJMmF5Myu1JtOKMi_alEqL4c1NXUHVlb89yvCnPHXvhC26ufjHXGJeYVbQBT05V8HRTF_.s3O367T9vM39nW_47WBBaU', 'Content-Type': 'application/json', 'Content-Length': '91'} 
- body=b'"/Users/vivadivel/Desktop/gorest-api-framework/resources/../data/invalid_account_data.json"' 
- </msg>
-<msg time="2025-07-08T02:16:39.808520" level="INFO">POST Response : url=https://orgfarm-2acc2d9727-dev-ed.develop.my.salesforce.com/services/data/v62.0/sobjects/Account/ 
+<msg time="2025-07-08T12:59:31.970479" level="INFO">POST Response : url=https://orgfarm-2acc2d9727-dev-ed.develop.my.salesforce.com/services/data/v62.0/sobjects/Account/ 
  status=400, reason=Bad Request 
- headers={'Date': 'Mon, 07 Jul 2025 20:46:39 GMT', 'Content-Type': 'application/json;charset=UTF-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Cache-Control': 'no-cache,must-revalidate,max-age=0,no-store,private', 'X-Robots-Tag': 'none', 'Sforce-Limit-Info': 'api-usage=102/15000', 'X-Content-Type-Options': 'nosniff', 'Set-Cookie': 'CookieConsentPolicy=0:1; path=/; expires=Tue, 07-Jul-2026 20:46:39 GMT; Max-Age=31536000; secure, LSKey-c$CookieConsentPolicy=0:1; path=/; expires=Tue, 07-Jul-2026 20:46:39 GMT; Max-Age=31536000; secure, BrowserId=e08zKFtzEfCgSHUbgG2N5w; domain=.salesforce.com; path=/; expires=Tue, 07-Jul-2026 20:46:39 GMT; Max-Age=31536000; secure; SameSite=None', 'Strict-Transport-Security': 'max-age=63072000; includeSubDomains', 'Server': 'sfdcedge', 'X-SFDC-Request-Id': 'e14c4d7bf8b60999bd3a9d12ce52f0a1', 'X-Request-Id': 'e14c4d7bf8b60999bd3a9d12ce52f0a1'} 
+ headers={'Date': 'Tue, 08 Jul 2025 07:29:31 GMT', 'Content-Type': 'application/json;charset=UTF-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Strict-Transport-Security': 'max-age=63072000; includeSubDomains', 'X-Robots-Tag': 'none', 'Set-Cookie': 'CookieConsentPolicy=0:1; path=/; expires=Wed, 08-Jul-2026 07:29:31 GMT; Max-Age=31536000; secure, LSKey-c$CookieConsentPolicy=0:1; path=/; expires=Wed, 08-Jul-2026 07:29:31 GMT; Max-Age=31536000; secure, BrowserId=Sf-oY1vNEfCZpj0MpK9WRw; domain=.salesforce.com; path=/; expires=Wed, 08-Jul-2026 07:29:31 GMT; Max-Age=31536000; secure; SameSite=None', 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'no-cache,must-revalidate,max-age=0,no-store,private', 'Sforce-Limit-Info': 'api-usage=1/15000', 'Server': 'sfdcedge', 'X-SFDC-Request-Id': 'f64fd35cdffd32753d94b0beadc85a3f', 'X-Request-Id': 'f64fd35cdffd32753d94b0beadc85a3f'} 
  body=[{"message":"Json Deserialization failed on token 'null' and has left off in the middle of parsing a row. Will go to end of row to begin parsing the next row","errorCode":"INVALID_FIELD"}] 
  </msg>
-<msg time="2025-07-08T02:16:39.809750" level="INFO">/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/urllib3/connectionpool.py:1097: InsecureRequestWarning: Unverified HTTPS request is being made to host 'orgfarm-2acc2d9727-dev-ed.develop.my.salesforce.com'. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.io/en/latest/advanced-usage.html#tls-warnings
-  warnings.warn(</msg>
-<msg time="2025-07-08T02:16:39.810202" level="INFO">${resp} = &lt;Response [400]&gt;</msg>
+<msg time="2025-07-08T12:59:31.970777" level="FAIL">HTTPError: 400 Client Error: Bad Request for url: https://orgfarm-2acc2d9727-dev-ed.develop.my.salesforce.com/services/data/v62.0/sobjects/Account/</msg>
 <var>${resp}</var>
-<arg>mysession</arg>
 <arg>${INSTANCE_URL}/services/data/${API_VERSION}/sobjects/Account/</arg>
 <arg>headers=${headers}</arg>
-<arg>json=${INVALID_DATA}</arg>
-<arg>expected_status=400</arg>
-<doc>Sends a POST request on a previously created HTTP Session.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.449697" elapsed="0.360547"/>
+<arg>json=${MALFORMED_JSON}</arg>
+<doc>Sends a POST request.</doc>
+<status status="FAIL" start="2025-07-08T12:59:31.137685" elapsed="0.839121">HTTPError: 400 Client Error: Bad Request for url: https://orgfarm-2acc2d9727-dev-ed.develop.my.salesforce.com/services/data/v62.0/sobjects/Account/</status>
 </kw>
 <kw name="Should Be Equal As Integers" owner="BuiltIn">
-<msg time="2025-07-08T02:16:39.811468" level="INFO">Argument types are:
-&lt;class 'int'&gt;
-&lt;class 'str'&gt;</msg>
 <arg>${resp.status_code}</arg>
 <arg>400</arg>
 <doc>Fails if objects are unequal after converting them to integers.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.810646" elapsed="0.000895"/>
+<status status="NOT RUN" start="2025-07-08T12:59:31.977280" elapsed="0.000045"/>
 </kw>
-<kw name="Should Contain" owner="BuiltIn">
-<arg>${resp.text}</arg>
-<arg>INVALID_FIELD</arg>
-<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.811785" elapsed="0.000759"/>
+<kw name="Set Variable" owner="BuiltIn">
+<var>${account_id}</var>
+<arg>${resp.json()['id']}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" start="2025-07-08T12:59:31.977541" elapsed="0.000026"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<arg>${account_id}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="NOT RUN" start="2025-07-08T12:59:31.977854" elapsed="0.000025"/>
 </kw>
 <kw name="Log To Console" owner="BuiltIn">
 <arg>${resp}</arg>
 <doc>Logs the given message to the console.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.812793" elapsed="0.000235"/>
+<status status="NOT RUN" start="2025-07-08T12:59:31.978072" elapsed="0.000019"/>
 </kw>
 <kw name="Log To Console" owner="BuiltIn">
 <arg>${resp.text}</arg>
 <doc>Logs the given message to the console.</doc>
-<status status="PASS" start="2025-07-08T02:16:39.813323" elapsed="0.000729"/>
+<status status="NOT RUN" start="2025-07-08T12:59:31.978229" elapsed="0.000017"/>
 </kw>
 <tag>regression</tag>
-<status status="PASS" start="2025-07-08T02:16:39.448791" elapsed="0.365467"/>
+<tag>smoke</tag>
+<status status="FAIL" start="2025-07-08T12:59:31.137366" elapsed="0.841185">HTTPError: 400 Client Error: Bad Request for url: https://orgfarm-2acc2d9727-dev-ed.develop.my.salesforce.com/services/data/v62.0/sobjects/Account/</status>
 </test>
-<status status="PASS" start="2025-07-08T02:16:39.438198" elapsed="0.376698"/>
-</suite>
-<status status="PASS" start="2025-07-08T02:16:38.714881" elapsed="1.101242"/>
+<status status="FAIL" start="2025-07-08T12:59:31.012539" elapsed="0.966647"/>
 </suite>
 <statistics>
 <total>
-<stat pass="2" fail="0" skip="0">All Tests</stat>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
 </total>
 <tag>
-<stat pass="2" fail="0" skip="0">regression</stat>
-<stat pass="1" fail="0" skip="0">smoke</stat>
+<stat pass="0" fail="1" skip="0">regression</stat>
+<stat pass="0" fail="1" skip="0">smoke</stat>
 </tag>
 <suite>
-<stat name="Create" id="s1" pass="2" fail="0" skip="0">Create</stat>
-<stat name="Create Account" id="s1-s1" pass="1" fail="0" skip="0">Create.Create Account</stat>
-<stat name="Create Account With Invalid Fields" id="s1-s2" pass="1" fail="0" skip="0">Create.Create Account With Invalid Fields</stat>
+<stat name="Create Account Invalid Json" id="s1" pass="0" fail="1" skip="0">Create Account Invalid Json</stat>
 </suite>
 </statistics>
 <errors>
