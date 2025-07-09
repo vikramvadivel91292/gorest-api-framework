@@ -40,8 +40,21 @@ Generate Random String
 Create Account With Valid Data
     ${headers}=    Create Dictionary    Authorization=Bearer ${ACCESS_TOKEN}    Content-Type=application/json
     ${random}=    Generate Random String    5
+    ${account_data}=    Create Dictionary    name=${random} Corporation
+    # ${json_string}=    Get File    data/account_data.json
+    # ${account_data}=    Evaluate    __import__('json').loads("""${json_string}""")
+    ${resp}=    POST    ${INSTANCE_URL}/services/data/${API_VERSION}/sobjects/Account/    headers=${headers}    json=${account_data}
+    Should Be Equal As Integers    ${resp.status_code}    201
+    ${account_id}=    Set Variable    ${resp.json()['id']}
+    Set Suite Variable    ${account_id}
+    RETURN    ${account_id}    ${resp}
+
+
+Create Opportunity With Valid Data
+    ${headers}=    Create Dictionary    Authorization=Bearer ${ACCESS_TOKEN}    Content-Type=application/json
+    ${random}=    Generate Random String    5
     ${data}=    Create Dictionary    name=${random} Corporation
-    ${resp}=    POST    ${INSTANCE_URL}/services/data/${API_VERSION}/sobjects/Account/    headers=${headers}    json=${data}
+    ${resp}=    POST    ${INSTANCE_URL}/services/data/${API_VERSION}/sobjects/Opportunity/    headers=${headers}    json=${data}
     Should Be Equal As Integers    ${resp.status_code}    201
     ${account_id}=    Set Variable    ${resp.json()['id']}
     Set Suite Variable    ${account_id}

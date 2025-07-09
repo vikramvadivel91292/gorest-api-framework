@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.1 (Python 3.13.5 on darwin)" generated="2025-07-09T15:32:10.434948" rpa="false" schemaversion="5">
+<suite id="s1" name="Create Account" source="/Users/vivadivel/Desktop/gorest-api-framework/tests/Sandbox_Account/Create/Create_Account.robot">
+<kw name="Load Access Token And Account Data" owner="keyword" type="SETUP">
+<kw name="Load Access Token" owner="keyword">
+<kw name="Get File" owner="OperatingSystem">
+<msg time="2025-07-09T15:32:10.557012" level="INFO" html="true">Getting file '&lt;a href="file:///Users/vivadivel/Desktop/gorest-api-framework/data/token.txt"&gt;/Users/vivadivel/Desktop/gorest-api-framework/data/token.txt&lt;/a&gt;'.</msg>
+<msg time="2025-07-09T15:32:10.557445" level="INFO">${token} = 00DgL000006I3IZ!AQEAQFMcQ8RA0rP2q4NzP_747aSJtC9xU5nRF52P_tw_dPEVAw0hUUSfBkniTmypFPFQRIMjrvHq6AD6ydaN4BiYyqDqHwpH</msg>
+<var>${token}</var>
+<arg>${TOKEN_FILE}</arg>
+<doc>Returns the contents of a specified file.</doc>
+<status status="PASS" start="2025-07-09T15:32:10.556939" elapsed="0.000523"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2025-07-09T15:32:10.557836" level="INFO">${ACCESS_TOKEN} = 00DgL000006I3IZ!AQEAQFMcQ8RA0rP2q4NzP_747aSJtC9xU5nRF52P_tw_dPEVAw0hUUSfBkniTmypFPFQRIMjrvHq6AD6ydaN4BiYyqDqHwpH</msg>
+<arg>${ACCESS_TOKEN}</arg>
+<arg>${token}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2025-07-09T15:32:10.557530" elapsed="0.000326"/>
+</kw>
+<doc>Loads the access token from file</doc>
+<status status="PASS" start="2025-07-09T15:32:10.556719" elapsed="0.001165"/>
+</kw>
+<kw name="Load Account Data" owner="keyword">
+<kw name="Get File" owner="OperatingSystem">
+<msg time="2025-07-09T15:32:10.558047" level="INFO" html="true">Getting file '&lt;a href="file:///Users/vivadivel/Desktop/gorest-api-framework/data/account_data.json"&gt;/Users/vivadivel/Desktop/gorest-api-framework/data/account_data.json&lt;/a&gt;'.</msg>
+<msg time="2025-07-09T15:32:10.558201" level="INFO">${json} = {
+  "Name": "hhh Corporation",
+  "AccountNumber": "321324334",
+  "Type": "Customer - Direct",
+  "NumberOfEmployees": "310",
+  "Rating": "Hot",
+  "Site": "US Site",
+  "YearStarted": "2000",
+  "Phone": ...</msg>
+<var>${json}</var>
+<arg>${ACCOUNT_DATA_FILE}</arg>
+<doc>Returns the contents of a specified file.</doc>
+<status status="PASS" start="2025-07-09T15:32:10.557996" elapsed="0.000215"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-07-09T15:32:10.558359" level="INFO">${account_data} = {'Name': 'hhh Corporation', 'AccountNumber': '321324334', 'Type': 'Customer - Direct', 'NumberOfEmployees': '310', 'Rating': 'Hot', 'Site': 'US Site', 'YearStarted': '2000', 'Phone': '555-1234', 'Fax'...</msg>
+<var>${account_data}</var>
+<arg>json.loads('''${json}''')</arg>
+<arg>json</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-07-09T15:32:10.558248" elapsed="0.000119"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2025-07-09T15:32:10.558473" level="INFO">${ACCOUNT_DATA} = {'Name': 'hhh Corporation', 'AccountNumber': '321324334', 'Type': 'Customer - Direct', 'NumberOfEmployees': '310', 'Rating': 'Hot', 'Site': 'US Site', 'YearStarted': '2000', 'Phone': '555-1234', 'Fax'...</msg>
+<arg>${ACCOUNT_DATA}</arg>
+<arg>${account_data}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2025-07-09T15:32:10.558405" elapsed="0.000082"/>
+</kw>
+<doc>Loads the account data from JSON file</doc>
+<status status="PASS" start="2025-07-09T15:32:10.557936" elapsed="0.000570"/>
+</kw>
+<doc>Loads both access token and account data</doc>
+<status status="PASS" start="2025-07-09T15:32:10.556612" elapsed="0.001908"/>
+</kw>
+<test id="s1-t1" name="Create New Account" line="9">
+<kw name="Create Account With Valid Data" owner="keyword">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-07-09T15:32:10.558880" level="INFO">${headers} = {'Authorization': 'Bearer 00DgL000006I3IZ!AQEAQFMcQ8RA0rP2q4NzP_747aSJtC9xU5nRF52P_tw_dPEVAw0hUUSfBkniTmypFPFQRIMjrvHq6AD6ydaN4BiYyqDqHwpH', 'Content-Type': 'application/json'}</msg>
+<var>${headers}</var>
+<arg>Authorization=Bearer ${ACCESS_TOKEN}</arg>
+<arg>Content-Type=application/json</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-07-09T15:32:10.558773" elapsed="0.000117"/>
+</kw>
+<kw name="Generate Random String" owner="keyword">
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-07-09T15:32:10.559060" level="INFO">${CHARS} = abcdefghijklmnopqrstuvwxyz0123456789</msg>
+<var>${CHARS}</var>
+<arg>abcdefghijklmnopqrstuvwxyz0123456789</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-07-09T15:32:10.559021" elapsed="0.000047"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-07-09T15:32:10.559215" level="INFO">${result} = smepx</msg>
+<var>${result}</var>
+<arg>''.join(random.choices('${CHARS}', k=${length}))</arg>
+<arg>random</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-07-09T15:32:10.559101" elapsed="0.000122"/>
+</kw>
+<return>
+<value>${result}</value>
+<status status="PASS" start="2025-07-09T15:32:10.559241" elapsed="0.000018"/>
+</return>
+<msg time="2025-07-09T15:32:10.559300" level="INFO">${random} = smepx</msg>
+<var>${random}</var>
+<arg>5</arg>
+<status status="PASS" start="2025-07-09T15:32:10.558945" elapsed="0.000362"/>
+</kw>
+<kw name="Get File" owner="OperatingSystem">
+<msg time="2025-07-09T15:32:10.559558" level="INFO" html="true">Getting file '&lt;a href="file:///Users/vivadivel/Desktop/gorest-api-framework/data/account_data.json"&gt;/Users/vivadivel/Desktop/gorest-api-framework/data/account_data.json&lt;/a&gt;'.</msg>
+<msg time="2025-07-09T15:32:10.559620" level="INFO">${json_string} = {
+  "Name": "hhh Corporation",
+  "AccountNumber": "321324334",
+  "Type": "Customer - Direct",
+  "NumberOfEmployees": "310",
+  "Rating": "Hot",
+  "Site": "US Site",
+  "YearStarted": "2000",
+  "Phone": ...</msg>
+<var>${json_string}</var>
+<arg>data/account_data.json</arg>
+<doc>Returns the contents of a specified file.</doc>
+<status status="PASS" start="2025-07-09T15:32:10.559338" elapsed="0.000290"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-07-09T15:32:10.559741" level="INFO">${account_data} = {'Name': 'hhh Corporation', 'AccountNumber': '321324334', 'Type': 'Customer - Direct', 'NumberOfEmployees': '310', 'Rating': 'Hot', 'Site': 'US Site', 'YearStarted': '2000', 'Phone': '555-1234', 'Fax'...</msg>
+<var>${account_data}</var>
+<arg>__import__('json').loads("""${json_string}""")</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-07-09T15:32:10.559659" elapsed="0.000091"/>
+</kw>
+<kw name="POST" owner="RequestsLibrary">
+<msg time="2025-07-09T15:32:11.320449" level="INFO">POST Request : url=https://orgfarm-2acc2d9727-dev-ed.develop.my.salesforce.com/services/data/v62.0/sobjects/Account/ 
+ path_url=/services/data/v62.0/sobjects/Account/ 
+ headers={'User-Agent': 'python-requests/2.32.4', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer 00DgL000006I3IZ!AQEAQFMcQ8RA0rP2q4NzP_747aSJtC9xU5nRF52P_tw_dPEVAw0hUUSfBkniTmypFPFQRIMjrvHq6AD6ydaN4BiYyqDqHwpH', 'Content-Type': 'application/json', 'Content-Length': '945'} 
+ body=b'{"Name": "hhh Corporation", "AccountNumber": "321324334", "Type": "Customer - Direct", "NumberOfEmployees": "310", "Rating": "Hot", "Site": "US Site", "YearStarted": "2000", "Phone": "555-1234", "Fax": "555-5678", "Ownership": "Public", "TickerSymbol": "ACME", "Website": "https://acme.example.com", "Industry": "Manufacturing", "BillingStreet": "123 Main St", "BillingCity": "California", "BillingState": "California", "BillingPostalCode": "90001", "BillingCountry": "United States", "ShippingStreet": "123 Main St", "ShippingCity": "California", "ShippingState": "California", "ShippingPostalCode": "90001", "ShippingCountry": "United States", "Description": "Test account created via Robot Framework automation", "SLA__c": "Platinum", "SLAExpirationDate__c": "2025-12-31", "SLASerialNumber__c": "SN12345678", "Active__c": "Yes", "CustomerPriority__c": "High", "DunsNumber": "123456789", "Jigsaw": "Jigsaw67890", "UpsellOpportunity__c": "Yes"}' 
+ </msg>
+<msg time="2025-07-09T15:32:11.320708" level="INFO">POST Response : url=https://orgfarm-2acc2d9727-dev-ed.develop.my.salesforce.com/services/data/v62.0/sobjects/Account/ 
+ status=201, reason=Created 
+ headers={'Date': 'Wed, 09 Jul 2025 10:02:11 GMT', 'Content-Type': 'application/json;charset=UTF-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Sforce-Limit-Info': 'api-usage=319/15000', 'X-Content-Type-Options': 'nosniff', 'X-Robots-Tag': 'none', 'Set-Cookie': 'CookieConsentPolicy=0:1; path=/; expires=Thu, 09-Jul-2026 10:02:10 GMT; Max-Age=31536000; secure, LSKey-c$CookieConsentPolicy=0:1; path=/; expires=Thu, 09-Jul-2026 10:02:10 GMT; Max-Age=31536000; secure, BrowserId=x8Ec8VyrEfCUV4veN-0EtQ; domain=.salesforce.com; path=/; expires=Thu, 09-Jul-2026 10:02:10 GMT; Max-Age=31536000; secure; SameSite=None', 'Content-Encoding': 'gzip', 'Vary': 'Accept-Encoding', 'Strict-Transport-Security': 'max-age=63072000; includeSubDomains', 'Location': '/services/data/v62.0/sobjects/Account/001gL00000DQ57pQAD', 'Cache-Control': 'no-cache,must-revalidate,max-age=0,no-store,private', 'Server': 'sfdcedge', 'X-SFDC-Request-Id': 'b4294590877619f681042e38e2b818c5', 'X-Request-Id': 'b4294590877619f681042e38e2b818c5'} 
+ body={"id":"001gL00000DQ57pQAD","success":true,"errors":[]} 
+ </msg>
+<msg time="2025-07-09T15:32:11.320890" level="INFO">${resp} = &lt;Response [201]&gt;</msg>
+<var>${resp}</var>
+<arg>${INSTANCE_URL}/services/data/${API_VERSION}/sobjects/Account/</arg>
+<arg>headers=${headers}</arg>
+<arg>json=${account_data}</arg>
+<doc>Sends a POST request.</doc>
+<status status="PASS" start="2025-07-09T15:32:10.559781" elapsed="0.761132"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2025-07-09T15:32:11.321663" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${resp.status_code}</arg>
+<arg>201</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2025-07-09T15:32:11.321103" elapsed="0.000616"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-07-09T15:32:11.322252" level="INFO">${account_id} = 001gL00000DQ57pQAD</msg>
+<var>${account_id}</var>
+<arg>${resp.json()['id']}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-07-09T15:32:11.321824" elapsed="0.000447"/>
+</kw>
+<kw name="Set Suite Variable" owner="BuiltIn">
+<msg time="2025-07-09T15:32:11.322507" level="INFO">${account_id} = 001gL00000DQ57pQAD</msg>
+<arg>${account_id}</arg>
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<status status="PASS" start="2025-07-09T15:32:11.322365" elapsed="0.000170"/>
+</kw>
+<return>
+<value>${account_id}</value>
+<value>${resp}</value>
+<status status="PASS" start="2025-07-09T15:32:11.322575" elapsed="0.000070"/>
+</return>
+<msg time="2025-07-09T15:32:11.322777" level="INFO">${user_id} = 001gL00000DQ57pQAD</msg>
+<msg time="2025-07-09T15:32:11.322796" level="INFO">${resp} = &lt;Response [201]&gt;</msg>
+<var>${user_id}</var>
+<var>${resp}</var>
+<status status="PASS" start="2025-07-09T15:32:10.558700" elapsed="0.764106"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>Created Account with ID: ${user_id}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2025-07-09T15:32:11.322910" elapsed="0.000085"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>${resp.text}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2025-07-09T15:32:11.323048" elapsed="0.000226"/>
+</kw>
+<tag>regression</tag>
+<tag>smoke</tag>
+<status status="PASS" start="2025-07-09T15:32:10.558542" elapsed="0.764791"/>
+</test>
+<status status="PASS" start="2025-07-09T15:32:10.435846" elapsed="0.887675"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">regression</stat>
+<stat pass="1" fail="0" skip="0">smoke</stat>
+</tag>
+<suite>
+<stat name="Create Account" id="s1" pass="1" fail="0" skip="0">Create Account</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
