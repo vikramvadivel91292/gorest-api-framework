@@ -25,6 +25,12 @@ Load Access Token And Account Data
     Load Access Token
     Load Account Data
 
+Should Be Equal As Booleans
+    [Arguments]    ${actual}    ${expected}
+    ${actual_bool}=    Evaluate    str(${actual}).strip().lower() in ['true', '1']
+    ${expected_bool}=    Evaluate    str(${expected}).strip().lower() in ['true', '1']
+    Should Be Equal    ${actual_bool}    ${expected_bool}
+
 Generate Random String
     [Arguments]    ${length}
     ${CHARS}=    Set Variable    abcdefghijklmnopqrstuvwxyz0123456789

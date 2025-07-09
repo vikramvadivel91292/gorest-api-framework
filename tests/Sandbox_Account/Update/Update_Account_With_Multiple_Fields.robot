@@ -20,5 +20,6 @@ Update Account With Multiple Fields
     Log To Console   ${resp.content}
     ${account}=    Convert String To Json    ${resp.text}
     FOR    ${key}    IN    @{update_data.keys()}
-        Should Be Equal    ${account['${key}']}    ${update_data['${key}']}
+        Run Keyword If    '${key}' in ['AnnualRevenue', 'NumberOfEmployees']    Should Be Equal As Numbers    ${account['${key}']}    ${update_data['${key}']}
+        ...    ELSE    Should Be Equal    ${account['${key}']}    ${update_data['${key}']}
     END

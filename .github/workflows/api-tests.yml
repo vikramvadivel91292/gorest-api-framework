@@ -182,7 +182,7 @@ jobs:
           path: ${{ env.ROBOT_RESULTS_DIR }}/output.xml
 
   publish-allure-report:
-    needs: [test, rerun-failed]
+    needs: [test]
     if: always()
     runs-on: ubuntu-latest
     steps:

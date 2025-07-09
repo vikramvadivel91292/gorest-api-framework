@@ -25,4 +25,3 @@ Delete Account And Validate
     Log To Console   ${resp.text}
     Should Be Equal As Integers    ${resp.status_code}    404
     Should Contain    ${resp.text}    NOT_FOUND
-
