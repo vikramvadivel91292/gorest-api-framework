@@ -1,12 +1,11 @@
-# 🤖 Robot Framework API Automation – Go REST + GitHub + JSONPlaceholder
+# 🤖 Robot Framework API Automation
 
 [![Robot Tests](https://github.com/<your-username>/gorest-api-framework/actions/workflows/api-tests.yml/badge.svg)](https://github.com/<your-username>/gorest-api-framework/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 This repository demonstrates a scalable API automation framework built using Robot Framework for public APIs such as:
+- ✅ Salesforce Sandbox Account object (https://login.salesforce.com)
 - ✅ Go REST (https://gorest.co.in)
-- ✅ GitHub API (https://api.github.com)
-- ✅ JSONPlaceholder (https://jsonplaceholder.typicode.com)
 
 ---
 
