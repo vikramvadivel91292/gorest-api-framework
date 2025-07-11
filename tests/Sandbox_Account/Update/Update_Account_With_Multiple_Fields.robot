@@ -9,7 +9,8 @@ Suite Setup    Load Access Token And Account Data
 *** Test Cases ***
 Update Account With Multiple Fields
     [Tags]    smoke    regression
-    ${account_id}=    Create Account With Valid Data
+    ${account_id_raw}=    Create Account With Valid Data
+    ${account_id}=    Get From List    ${account_id_raw}    0
     ${headers}=    Create Dictionary    Authorization=Bearer ${ACCESS_TOKEN}    Content-Type=application/json
     ${json_string}=    Get File    data/update.json
     ${update_data}=    Evaluate    __import__('json').loads("""${json_string}""")
